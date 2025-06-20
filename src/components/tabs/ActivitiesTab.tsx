@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface ActivitiesTabProps {
   onSave: (data: any) => void;
@@ -19,7 +19,8 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave }) => {
       title: '',
       description: '',
       icon: '',
-      category: '0'
+      category: '0',
+      image_url: ''
     }]
   });
 
@@ -39,7 +40,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave }) => {
   const addActivity = () => {
     setFormData(prev => ({
       ...prev,
-      activities: [...prev.activities, { title: '', description: '', icon: '', category: '0' }]
+      activities: [...prev.activities, { title: '', description: '', icon: '', category: '0', image_url: '' }]
     }));
   };
 
@@ -78,22 +79,40 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
+            <Label htmlFor="hero_image">Hero Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="hero_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('hero_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('hero_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Hero Image
+              </Button>
+              {formData.hero_image && (
+                <span className="text-sm text-gray-600">{formData.hero_image}</span>
+              )}
+            </div>
+          </div>
+          <div>
             <Label htmlFor="hero_description">Hero Description</Label>
             <Textarea
               id="hero_description"
               placeholder="Description for the activities hero section"
               value={formData.hero_description}
               onChange={(e) => updateField('hero_description', e.target.value)}
-              className="mt-1"
-            />
-          </div>
-          <div>
-            <Label htmlFor="hero_image">Hero Image</Label>
-            <Textarea
-              id="hero_image"
-              placeholder="Hero image URL or description"
-              value={formData.hero_image}
-              onChange={(e) => updateField('hero_image', e.target.value)}
               className="mt-1"
             />
           </div>
@@ -121,6 +140,36 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave }) => {
               </div>
               
               <div className="space-y-4">
+                <div>
+                  <Label>Activity Picture</Label>
+                  <div className="mt-1 flex items-center space-x-2">
+                    <input
+                      id={`activity_image_${index}`}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          updateActivity(index, 'image_url', file.name);
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById(`activity_image_${index}`)?.click()}
+                      className="flex items-center"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Image
+                    </Button>
+                    {activity.image_url && (
+                      <span className="text-sm text-gray-600">{activity.image_url}</span>
+                    )}
+                  </div>
+                </div>
+                
                 <div>
                   <Label>Activity Title</Label>
                   <Textarea

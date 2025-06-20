@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface RulesTabProps {
   onSave: (data: any) => void;
@@ -13,6 +13,7 @@ interface RulesTabProps {
 
 const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
   const [formData, setFormData] = useState({
+    rules_image: '',
     rules: [{
       title: '',
       category: '0'
@@ -23,6 +24,10 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
       type: '0'
     }]
   });
+
+  const updateField = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const updateRule = (index: number, field: string, value: string) => {
     setFormData(prev => ({
@@ -70,26 +75,16 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
     }));
   };
 
-  const ruleCategories = [
+  const ruleCategoryOptions = [
     { value: '0', label: 'General Rule' },
     { value: '1', label: 'Pet Policy Rule' },
     { value: '2', label: 'Facilities Rule' }
   ];
 
-  const faqTypes = [
-    { value: '0', label: 'Cancellation Policy' },
-    { value: '1', label: 'Pets' },
-    { value: '2', label: 'RV Hookups' },
-    { value: '3', label: 'Amenities' },
-    { value: '4', label: 'Visitors' },
-    { value: '5', label: 'WiFi' },
-    { value: '6', label: 'Check-in/Check-out' },
-    { value: '7', label: 'Cabin Linens' },
-    { value: '8', label: 'Campfires' },
-    { value: '9', label: 'Camp Store' },
-    { value: '10', label: 'Laundry' },
-    { value: '11', label: 'Restaurants' }
-  ];
+  const faqTypeOptions = Array.from({ length: 12 }, (_, i) => ({
+    value: i.toString(),
+    label: `FAQ Type ${i}`
+  }));
 
   const handleSave = () => {
     onSave(formData);
@@ -98,17 +93,54 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-800">Rules & FAQs Page Content</h2>
+        <h2 className="text-2xl font-bold text-slate-800">Rules Page Content</h2>
         <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
           <Save className="w-4 h-4 mr-2" />
           Save Changes
         </Button>
       </div>
 
+      {/* Header Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg text-blue-700">Page Header</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="rules_image">Rules Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="rules_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('rules_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('rules_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Rules Image
+              </Button>
+              {formData.rules_image && (
+                <span className="text-sm text-gray-600">{formData.rules_image}</span>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Rules Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Park Rules</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Rules List</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.rules.map((rule, index) => (
@@ -127,7 +159,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
               
               <div className="space-y-4">
                 <div>
-                  <Label>Rule Description</Label>
+                  <Label>Rule</Label>
                   <Textarea
                     placeholder="Concise sentence with the rule"
                     value={rule.title}
@@ -143,7 +175,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {ruleCategories.map((option) => (
+                      {ruleCategoryOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -173,9 +205,9 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent>
           {formData.faqs.map((faq, index) => (
-            <div key={index} className="border-2 border-green-200 p-4 rounded-lg mt-4">
+            <div key={index} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-green-800">FAQ {index + 1}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">FAQ {index + 1}</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -200,7 +232,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
                 <div>
                   <Label>Answer</Label>
                   <Textarea
-                    placeholder="Find the answer in the questions section"
+                    placeholder="FAQ answer"
                     value={faq.answer}
                     onChange={(e) => updateFaq(index, 'answer', e.target.value)}
                     className="mt-1"
@@ -211,10 +243,10 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave }) => {
                   <Label>Type</Label>
                   <Select value={faq.type} onValueChange={(value) => updateFaq(index, 'type', value)}>
                     <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select FAQ type" />
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {faqTypes.map((option) => (
+                      {faqTypeOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

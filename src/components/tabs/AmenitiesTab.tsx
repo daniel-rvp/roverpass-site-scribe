@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface AmenitiesTabProps {
   onSave: (data: any) => void;
@@ -20,7 +20,8 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({ onSave }) => {
     amenities: [{
       title: '',
       description: '',
-      category: '0'
+      category: '0',
+      image_url: ''
     }]
   });
 
@@ -40,7 +41,7 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({ onSave }) => {
   const addAmenity = () => {
     setFormData(prev => ({
       ...prev,
-      amenities: [...prev.amenities, { title: '', description: '', category: '0' }]
+      amenities: [...prev.amenities, { title: '', description: '', category: '0', image_url: '' }]
     }));
   };
 
@@ -78,22 +79,40 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
+            <Label htmlFor="amenities_image">Amenities Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="amenities_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('amenities_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('amenities_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Amenities Image
+              </Button>
+              {formData.amenities_image && (
+                <span className="text-sm text-gray-600">{formData.amenities_image}</span>
+              )}
+            </div>
+          </div>
+          <div>
             <Label htmlFor="amenities_description">Amenities Description</Label>
             <Textarea
               id="amenities_description"
               placeholder="Description for the amenities page"
               value={formData.amenities_description}
               onChange={(e) => updateField('amenities_description', e.target.value)}
-              className="mt-1"
-            />
-          </div>
-          <div>
-            <Label htmlFor="amenities_image">Amenities Image</Label>
-            <Textarea
-              id="amenities_image"
-              placeholder="Amenities image URL or description"
-              value={formData.amenities_image}
-              onChange={(e) => updateField('amenities_image', e.target.value)}
               className="mt-1"
             />
           </div>
@@ -121,6 +140,36 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({ onSave }) => {
               </div>
               
               <div className="space-y-4">
+                <div>
+                  <Label>Amenity Picture</Label>
+                  <div className="mt-1 flex items-center space-x-2">
+                    <input
+                      id={`amenity_main_image_${index}`}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          updateAmenity(index, 'image_url', file.name);
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById(`amenity_main_image_${index}`)?.click()}
+                      className="flex items-center"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Image
+                    </Button>
+                    {amenity.image_url && (
+                      <span className="text-sm text-gray-600">{amenity.image_url}</span>
+                    )}
+                  </div>
+                </div>
+                
                 <div>
                   <Label>Amenity Title</Label>
                   <Textarea

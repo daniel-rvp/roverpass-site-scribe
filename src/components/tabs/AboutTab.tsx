@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface AboutTabProps {
   onSave: (data: any) => void;
@@ -12,12 +12,13 @@ interface AboutTabProps {
 
 const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
   const [formData, setFormData] = useState({
+    hero_image: '',
     hero_title: '',
     hero_subtitle: '',
     intro_title: '',
     intro_subtitle: '',
     amenities: [{ title: '', icon: '' }],
-    accomodations: [{ title: '', subtitle: '' }],
+    accomodations: [{ title: '', subtitle: '', image_url: '' }],
     cta_title: '',
     cta_subtitle: ''
   });
@@ -87,6 +88,34 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
           <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="hero_image">Hero Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="hero_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('hero_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('hero_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Hero Image
+              </Button>
+              {formData.hero_image && (
+                <span className="text-sm text-gray-600">{formData.hero_image}</span>
+              )}
+            </div>
+          </div>
           <div>
             <Label htmlFor="hero_title">Hero Title</Label>
             <Textarea
@@ -209,6 +238,35 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
                   </Button>
                 </div>
                 <div className="space-y-2">
+                  <div>
+                    <Label>Accommodation Picture</Label>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <input
+                        id={`acc_image_${index}`}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            updateListItem('accomodations', index, 'image_url', file.name);
+                          }
+                        }}
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById(`acc_image_${index}`)?.click()}
+                        className="flex items-center"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Image
+                      </Button>
+                      {accommodation.image_url && (
+                        <span className="text-sm text-gray-600">{accommodation.image_url}</span>
+                      )}
+                    </div>
+                  </div>
                   <Textarea
                     placeholder="Accommodation type short title."
                     value={accommodation.title}
@@ -225,7 +283,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => addListItem('accomodations', { title: '', subtitle: '' })}
+              onClick={() => addListItem('accomodations', { title: '', subtitle: '', image_url: '' })}
               className="mt-2"
             >
               <Plus className="w-4 h-4 mr-2" />

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface HomeTabProps {
   onSave: (data: any) => void;
@@ -12,6 +12,9 @@ interface HomeTabProps {
 
 const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
   const [formData, setFormData] = useState({
+    hero_image: '',
+    intro_image: '',
+    activities_image: '',
     hero_title: '',
     hero_subtitle: '',
     hero_amenity_list: [{ title: '' }],
@@ -21,7 +24,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
     activities_subtitle: '',
     activities: [{ title: '', icon: '' }],
     amenities_subtitle: '',
-    amenities: [{ title: '', description: '' }],
+    amenities: [{ title: '', description: '', image_url: '' }],
     rule_check_in_out_time: '',
     rule_quiet_time: '',
     rule_campfire: '',
@@ -30,7 +33,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
     cta_title: '',
     cta_subtitle: '',
     attractions_subtitle: '',
-    attractions: [{ title: '', distance: '', description: '' }]
+    attractions: [{ title: '', distance: '', description: '', image_url: '' }]
   });
 
   const updateField = (field: string, value: string) => {
@@ -99,6 +102,34 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
+            <Label htmlFor="hero_image">Hero Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="hero_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('hero_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('hero_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Hero Image
+              </Button>
+              {formData.hero_image && (
+                <span className="text-sm text-gray-600">{formData.hero_image}</span>
+              )}
+            </div>
+          </div>
+          <div>
             <Label htmlFor="hero_title">Hero Title</Label>
             <Textarea
               id="hero_title"
@@ -159,6 +190,34 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
+            <Label htmlFor="intro_image">Introduction Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="intro_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('intro_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('intro_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Introduction Image
+              </Button>
+              {formData.intro_image && (
+                <span className="text-sm text-gray-600">{formData.intro_image}</span>
+              )}
+            </div>
+          </div>
+          <div>
             <Label htmlFor="intro_title">Introduction Title</Label>
             <Textarea
               id="intro_title"
@@ -178,6 +237,16 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
               className="mt-1"
             />
           </div>
+          <div>
+            <Label htmlFor="amenities_gallery_subtitle">Amenities Gallery Subtitle</Label>
+            <Textarea
+              id="amenities_gallery_subtitle"
+              placeholder="One sentence with a brief summary of key amenities and features and inviting to experience it."
+              value={formData.amenities_gallery_subtitle}
+              onChange={(e) => updateField('amenities_gallery_subtitle', e.target.value)}
+              className="mt-1"
+            />
+          </div>
         </CardContent>
       </Card>
 
@@ -187,6 +256,34 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
           <CardTitle className="text-lg text-blue-700">Activities Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="activities_image">Activities Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="activities_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('activities_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('activities_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Activities Image
+              </Button>
+              {formData.activities_image && (
+                <span className="text-sm text-gray-600">{formData.activities_image}</span>
+              )}
+            </div>
+          </div>
           <div>
             <Label htmlFor="activities_subtitle">Activities Subtitle</Label>
             <Textarea
@@ -273,6 +370,35 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
                   </Button>
                 </div>
                 <div className="space-y-2">
+                  <div>
+                    <Label>Amenity Picture</Label>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <input
+                        id={`amenity_image_${index}`}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            updateListItem('amenities', index, 'image_url', file.name);
+                          }
+                        }}
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById(`amenity_image_${index}`)?.click()}
+                        className="flex items-center"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Image
+                      </Button>
+                      {amenity.image_url && (
+                        <span className="text-sm text-gray-600">{amenity.image_url}</span>
+                      )}
+                    </div>
+                  </div>
                   <Textarea
                     placeholder="Amenity name."
                     value={amenity.title}
@@ -289,7 +415,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => addListItem('amenities', { title: '', description: '' })}
+              onClick={() => addListItem('amenities', { title: '', description: '', image_url: '' })}
               className="mt-2"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -420,6 +546,35 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
                   </Button>
                 </div>
                 <div className="space-y-2">
+                  <div>
+                    <Label>Attraction Picture</Label>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <input
+                        id={`attraction_image_${index}`}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            updateListItem('attractions', index, 'image_url', file.name);
+                          }
+                        }}
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById(`attraction_image_${index}`)?.click()}
+                        className="flex items-center"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Image
+                      </Button>
+                      {attraction.image_url && (
+                        <span className="text-sm text-gray-600">{attraction.image_url}</span>
+                      )}
+                    </div>
+                  </div>
                   <Textarea
                     placeholder="Attraction name."
                     value={attraction.title}
@@ -441,7 +596,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => addListItem('attractions', { title: '', distance: '', description: '' })}
+              onClick={() => addListItem('attractions', { title: '', distance: '', description: '', image_url: '' })}
               className="mt-2"
             >
               <Plus className="w-4 h-4 mr-2" />

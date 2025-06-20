@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save } from 'lucide-react';
+import { Save, Upload } from 'lucide-react';
 
 interface ContactTabProps {
   onSave: (data: any) => void;
@@ -12,6 +12,7 @@ interface ContactTabProps {
 
 const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
   const [formData, setFormData] = useState({
+    contact_image: '',
     address: '',
     phone: '',
     mail: '',
@@ -30,7 +31,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-800">Contact Us Page Content</h2>
+        <h2 className="text-2xl font-bold text-slate-800">Contact Page Content</h2>
         <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
           <Save className="w-4 h-4 mr-2" />
           Save Changes
@@ -43,6 +44,34 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
+            <Label htmlFor="contact_image">Contact Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="contact_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('contact_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('contact_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Contact Image
+              </Button>
+              {formData.contact_image && (
+                <span className="text-sm text-gray-600">{formData.contact_image}</span>
+              )}
+            </div>
+          </div>
+          <div>
             <Label htmlFor="address">Address</Label>
             <Textarea
               id="address"
@@ -52,7 +81,6 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
               className="mt-1"
             />
           </div>
-          
           <div>
             <Label htmlFor="phone">Phone</Label>
             <Textarea
@@ -63,7 +91,6 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
               className="mt-1"
             />
           </div>
-          
           <div>
             <Label htmlFor="mail">Email</Label>
             <Textarea
@@ -74,7 +101,6 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
               className="mt-1"
             />
           </div>
-          
           <div>
             <Label htmlFor="hours">Hours</Label>
             <Textarea
@@ -85,7 +111,6 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
               className="mt-1"
             />
           </div>
-          
           <div>
             <Label htmlFor="find_us">How to Find Us</Label>
             <Textarea

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface ReservationsTabProps {
   onSave: (data: any) => void;
@@ -12,6 +12,7 @@ interface ReservationsTabProps {
 
 const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave }) => {
   const [formData, setFormData] = useState({
+    reservations_image: '',
     reservations_description: '',
     cta_description: '',
     accommodations: [{
@@ -114,6 +115,34 @@ const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave }) => {
           <CardTitle className="text-lg text-blue-700">Page Header</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="reservations_image">Reservations Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="reservations_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('reservations_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('reservations_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Reservations Image
+              </Button>
+              {formData.reservations_image && (
+                <span className="text-sm text-gray-600">{formData.reservations_image}</span>
+              )}
+            </div>
+          </div>
           <div>
             <Label htmlFor="reservations_description">Reservations Description</Label>
             <Textarea

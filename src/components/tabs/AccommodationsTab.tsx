@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface AccommodationsTabProps {
   onSave: (data: any) => void;
@@ -12,6 +12,7 @@ interface AccommodationsTabProps {
 
 const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
   const [formData, setFormData] = useState({
+    hero_image: '',
     hero_title: '',
     hero_subtitle: '',
     cta_title: '',
@@ -19,6 +20,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
     accommodations_list: [{
       title: '',
       description: '',
+      image: '',
       features: [{ title: '', icon: '' }]
     }]
   });
@@ -56,6 +58,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
       accommodations_list: [...prev.accommodations_list, {
         title: '',
         description: '',
+        image: '',
         features: [{ title: '', icon: '' }]
       }]
     }));
@@ -113,6 +116,34 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
+            <Label htmlFor="hero_image">Hero Image</Label>
+            <div className="mt-1 flex items-center space-x-2">
+              <input
+                id="hero_image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    updateField('hero_image', file.name);
+                  }
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('hero_image')?.click()}
+                className="flex items-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Hero Image
+              </Button>
+              {formData.hero_image && (
+                <span className="text-sm text-gray-600">{formData.hero_image}</span>
+              )}
+            </div>
+          </div>
+          <div>
             <Label htmlFor="hero_title">Hero Title</Label>
             <Textarea
               id="hero_title"
@@ -156,6 +187,36 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
               </div>
               
               <div className="space-y-4">
+                <div>
+                  <Label>Accommodation Picture</Label>
+                  <div className="mt-1 flex items-center space-x-2">
+                    <input
+                      id={`acc_main_image_${accIndex}`}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          updateAccommodation(accIndex, 'image', file.name);
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById(`acc_main_image_${accIndex}`)?.click()}
+                      className="flex items-center"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Image
+                    </Button>
+                    {accommodation.image && (
+                      <span className="text-sm text-gray-600">{accommodation.image}</span>
+                    )}
+                  </div>
+                </div>
+                
                 <div>
                   <Label>Accommodation Title</Label>
                   <Textarea
