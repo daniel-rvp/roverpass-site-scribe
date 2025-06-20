@@ -38,26 +38,44 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
   };
 
   const updateListItem = (listName: string, index: number, field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [listName]: prev[listName as keyof typeof prev].map((item: any, i: number) => 
-        i === index ? { ...item, [field]: value } : item
-      )
-    }));
+    setFormData(prev => {
+      const currentList = prev[listName as keyof typeof prev];
+      if (Array.isArray(currentList)) {
+        return {
+          ...prev,
+          [listName]: currentList.map((item: any, i: number) => 
+            i === index ? { ...item, [field]: value } : item
+          )
+        };
+      }
+      return prev;
+    });
   };
 
   const addListItem = (listName: string, template: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [listName]: [...prev[listName as keyof typeof prev], template]
-    }));
+    setFormData(prev => {
+      const currentList = prev[listName as keyof typeof prev];
+      if (Array.isArray(currentList)) {
+        return {
+          ...prev,
+          [listName]: [...currentList, template]
+        };
+      }
+      return prev;
+    });
   };
 
   const removeListItem = (listName: string, index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      [listName]: prev[listName as keyof typeof prev].filter((_: any, i: number) => i !== index)
-    }));
+    setFormData(prev => {
+      const currentList = prev[listName as keyof typeof prev];
+      if (Array.isArray(currentList)) {
+        return {
+          ...prev,
+          [listName]: currentList.filter((_: any, i: number) => i !== index)
+        };
+      }
+      return prev;
+    });
   };
 
   const handleSave = () => {
