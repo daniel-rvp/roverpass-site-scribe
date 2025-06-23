@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -8,10 +8,12 @@ import { Save, Upload } from 'lucide-react';
 
 interface ContactTabProps {
   onSave: (data: any) => void;
+  clientId: number
 }
 
-const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
+const ContactTab: React.FC<ContactTabProps> = ({ onSave, clientId }) => {
   const [formData, setFormData] = useState({
+    id: 0,
     contact_image: '',
     address: '',
     phone: '',
@@ -25,8 +27,50 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
   };
 
   const handleSave = () => {
-    onSave(formData);
+    console.log(formData)
+    fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/contact_us?id=eq.${clientId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(res => console.log(res))
   };
+
+  const [data, setData] = React.useState({
+      id: 0,
+      created_at: "",
+      client_id: 0,
+      address: "",
+      phone: "",
+      mail: "",
+      hours: "",
+      contact_image: "",
+      find_us: "",
+  })
+
+  useEffect(() => {
+    const gatherAboutData = async () => {
+      await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/contact_us?client_id=eq.${clientId}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setData(res[0]);
+        setFormData(res[0]);
+      })
+      } 
+      
+    gatherAboutData();
+  }, [clientId])
 
   return (
     <div className="space-y-6">
@@ -75,7 +119,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
             <Label htmlFor="address">Address</Label>
             <Textarea
               id="address"
-              placeholder="Park address"
+              placeholder={data.address}
               value={formData.address}
               onChange={(e) => updateField('address', e.target.value)}
               className="mt-1"
@@ -85,7 +129,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
             <Label htmlFor="phone">Phone</Label>
             <Textarea
               id="phone"
-              placeholder="Park phone"
+              placeholder={data.phone}
               value={formData.phone}
               onChange={(e) => updateField('phone', e.target.value)}
               className="mt-1"
@@ -95,7 +139,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
             <Label htmlFor="mail">Email</Label>
             <Textarea
               id="mail"
-              placeholder="Park mail"
+              placeholder={data.mail}
               value={formData.mail}
               onChange={(e) => updateField('mail', e.target.value)}
               className="mt-1"
@@ -105,7 +149,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
             <Label htmlFor="hours">Hours</Label>
             <Textarea
               id="hours"
-              placeholder="Park attention hours for contact"
+              placeholder={data.hours}
               value={formData.hours}
               onChange={(e) => updateField('hours', e.target.value)}
               className="mt-1"
@@ -115,7 +159,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
             <Label htmlFor="find_us">How to Find Us</Label>
             <Textarea
               id="find_us"
-              placeholder="Brief 1-2 sentence description on how to get there"
+              placeholder={data.find_us}
               value={formData.find_us}
               onChange={(e) => updateField('find_us', e.target.value)}
               className="mt-1"

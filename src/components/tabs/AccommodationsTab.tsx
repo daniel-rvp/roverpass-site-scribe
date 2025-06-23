@@ -8,9 +8,10 @@ import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface AccommodationsTabProps {
   onSave: (data: any) => void;
+  clientId: number
 }
 
-const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
+const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave, clientId }) => {
   const [formData, setFormData] = useState({
     hero_image: '',
     hero_title: '',
@@ -99,6 +100,55 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
     onSave(formData);
   };
 
+  const [data, setData] = React.useState({
+    id : 0,
+    cta_subtitle : '',
+    cta_title : '',
+    cta_image: '',
+    hero_image : '',
+    hero_subtitle : '',
+    hero_title : '',
+  });
+    const [accommodations, setAccomodations] = React.useState([]);
+  
+    React.useEffect(() => {
+      const gatherAboutData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/accommodations?client_id=eq.${clientId}`, {
+          method: 'GET',
+          headers: {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          }
+        })
+        .then(res => res.json())
+        .then(res => {
+          setData(res[0]);
+        })
+        } 
+        
+      gatherAboutData();
+    }, [clientId])
+
+  React.useEffect(() => {
+    if (data && data.id != 0) {
+      const gatheAboutAmenitiesData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/accommodations_site?accommodation_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setAccomodations(res);
+      })
+      }
+
+      gatheAboutAmenitiesData();
+    }
+  }, [data])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -172,7 +222,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
           <CardTitle className="text-lg text-blue-700">Accommodations List</CardTitle>
         </CardHeader>
         <CardContent>
-          {formData.accommodations_list.map((accommodation, accIndex) => (
+          {accommodations.map((accommodation, accIndex) => (
             <div key={accIndex} className="border-2 border-blue-200 p-6 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-blue-800">Accommodation {accIndex + 1}</h3>
@@ -239,33 +289,36 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
 
                 <div>
                   <Label>Features</Label>
-                  {accommodation.features.map((feature, featIndex) => (
-                    <div key={featIndex} className="border p-3 rounded mt-2">
-                      <div className="flex justify-between items-center mb-2">
-                        <h5 className="font-medium">Feature {featIndex + 1}</h5>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeFeature(accIndex, featIndex)}
-                          className="text-red-600"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
+                  { accommodation.features && Array.isArray(accommodation.features) && accommodation.features.length > 0 ?
+                    accommodation.features.features.map((feature, featIndex) => (
+                      <div key={featIndex} className="border p-3 rounded mt-2">
+                        <div className="flex justify-between items-center mb-2">
+                          <h5 className="font-medium">Feature {featIndex + 1}</h5>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeFeature(accIndex, featIndex)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        </div>
+                        <div className="space-y-2">
+                          <Textarea
+                            placeholder="Feature in 3-5 words"
+                            value={feature.title}
+                            onChange={(e) => updateFeature(accIndex, featIndex, 'title', e.target.value)}
+                          />
+                          <Textarea
+                            placeholder="lucide-react related icon"
+                            value={feature.icon}
+                            onChange={(e) => updateFeature(accIndex, featIndex, 'icon', e.target.value)}
+                          />
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Textarea
-                          placeholder="Feature in 3-5 words"
-                          value={feature.title}
-                          onChange={(e) => updateFeature(accIndex, featIndex, 'title', e.target.value)}
-                        />
-                        <Textarea
-                          placeholder="lucide-react related icon"
-                          value={feature.icon}
-                          onChange={(e) => updateFeature(accIndex, featIndex, 'icon', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                    : null
+                  }
                   <Button
                     variant="outline"
                     size="sm"
@@ -301,7 +354,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
             <Label htmlFor="cta_title">CTA Title</Label>
             <Textarea
               id="cta_title"
-              placeholder="Title to create interest in the park"
+              placeholder={data.cta_title}
               value={formData.cta_title}
               onChange={(e) => updateField('cta_title', e.target.value)}
               className="mt-1"
@@ -311,7 +364,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave }) => {
             <Label htmlFor="cta_subtitle">CTA Subtitle</Label>
             <Textarea
               id="cta_subtitle"
-              placeholder="One-line call to action encouraging bookings or relaxing at the park"
+              placeholder={data.cta_subtitle}
               value={formData.cta_subtitle}
               onChange={(e) => updateField('cta_subtitle', e.target.value)}
               className="mt-1"

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -8,9 +8,10 @@ import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface HomeTabProps {
   onSave: (data: any) => void;
+  clientId: number
 }
 
-const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
+const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
   const [formData, setFormData] = useState({
     hero_image: '',
     intro_image: '',
@@ -85,6 +86,152 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
     onSave(formData);
   };
 
+  const [data, setData] = React.useState({
+    id: 0,
+    hero_title: '',
+    hero_subtitle: '',
+    hero_image: '',
+    activities_image: '',
+    activities_subtitle: '',
+    amenities_gallery_subtitle: '',
+    amenities_gallery_title: '',
+    amenities_subtitle: '',
+    attractions_subtitle: '',
+    created_at: '',
+    cta_subtitle: '',
+    cta_title: '',
+    hero_subtitutle: '',
+    intro_image: '',
+    intro_subtitle: '',
+    intro_title:'',
+    rule_campfire: '',
+    rule_check_in_out_time: '',
+    rule_pets: '',
+    rule_quiet_time: '',
+    rule_wifi: '',
+    rules_image: '',
+    rules_subtitle: ''})
+  const [heroAmenities, setHeroAmenities] = React.useState([]);
+  const [galleryAmenities, setGalleryAmenities] = React.useState([]);
+  const [activities, setActivities] = React.useState([]);
+  const [amenities, setAmenities] = React.useState([]);
+  const [attractions, setAttractions] = React.useState([]);
+
+  useEffect(() => {
+    const gatherHomeData = async () => {
+      await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/home?client_id=eq.${clientId}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setData(res[0]);
+      })
+      } 
+      
+    gatherHomeData();
+  }, [clientId])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatherHomeAmenitiesData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/home_hero_amenity?home_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setHeroAmenities(res);
+      })
+      }
+
+      gatherHomeAmenitiesData();
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatherGalleryAmenitiesData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/home_gallery_amenity?home_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setGalleryAmenities(res);
+      })
+      }
+
+      gatherGalleryAmenitiesData();
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatherActivitiesData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/home_activity?home_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setActivities(res);
+      })
+      }
+      gatherActivitiesData();
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatherAmenitiesData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/home_amenity?home_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setAmenities(res);
+      })
+      }
+      gatherAmenitiesData();
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatherAttractionssData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/home_attraction?home_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setAttractions(res);
+      })
+      }
+      gatherAttractionssData();
+    }
+  }, [data])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -133,7 +280,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="hero_title">Hero Title</Label>
             <Textarea
               id="hero_title"
-              placeholder="Title that captures the park's experience and location."
+              placeholder={data.hero_title}
               value={formData.hero_title}
               onChange={(e) => updateField('hero_title', e.target.value)}
               className="mt-1"
@@ -143,7 +290,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="hero_subtitle">Hero Subtitle</Label>
             <Textarea
               id="hero_subtitle"
-              placeholder="One SEO-friendly phrase or headline that captures the park's experience and location."
+              placeholder={data.hero_subtitle}
               value={formData.hero_subtitle}
               onChange={(e) => updateField('hero_subtitle', e.target.value)}
               className="mt-1"
@@ -152,7 +299,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
           
           <div>
             <Label>Hero Amenity List</Label>
-            {formData.hero_amenity_list.map((amenity, index) => (
+            {heroAmenities.map((amenity, index) => (
               <div key={index} className="flex gap-2 mt-2">
                 <Textarea
                   placeholder="Amenity in 2–3 words inspiring description."
@@ -221,7 +368,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="intro_title">Introduction Title</Label>
             <Textarea
               id="intro_title"
-              placeholder="Title introducing the park's essence."
+              placeholder={data.intro_title}
               value={formData.intro_title}
               onChange={(e) => updateField('intro_title', e.target.value)}
               className="mt-1"
@@ -231,7 +378,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="intro_subtitle">Introduction Subtitle</Label>
             <Textarea
               id="intro_subtitle"
-              placeholder="A 2–4 line paragraph introducing the park and its benefits (highlight RV sites, cabins, amenities, and location)."
+              placeholder={data.intro_subtitle}
               value={formData.intro_subtitle}
               onChange={(e) => updateField('intro_subtitle', e.target.value)}
               className="mt-1"
@@ -288,7 +435,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="activities_subtitle">Activities Subtitle</Label>
             <Textarea
               id="activities_subtitle"
-              placeholder="1-3 sentences introducing the park activities."
+              placeholder={data.intro_subtitle}
               value={formData.activities_subtitle}
               onChange={(e) => updateField('activities_subtitle', e.target.value)}
               className="mt-1"
@@ -297,7 +444,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
           
           <div>
             <Label>Activities List</Label>
-            {formData.activities.map((activity, index) => (
+            {activities.map((activity, index) => (
               <div key={index} className="border p-4 rounded-lg mt-2">
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="font-medium">Activity {index + 1}</h4>
@@ -347,7 +494,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="amenities_subtitle">Amenities Subtitle</Label>
             <Textarea
               id="amenities_subtitle"
-              placeholder="One sentence introducing the amenities."
+              placeholder={data.amenities_subtitle}
               value={formData.amenities_subtitle}
               onChange={(e) => updateField('amenities_subtitle', e.target.value)}
               className="mt-1"
@@ -356,7 +503,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
           
           <div>
             <Label>Amenities List</Label>
-            {formData.amenities.map((amenity, index) => (
+            {amenities.map((amenity, index) => (
               <div key={index} className="border p-4 rounded-lg mt-2">
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="font-medium">Amenity {index + 1}</h4>
@@ -435,7 +582,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="rule_check_in_out_time">Check-in/Check-out Time</Label>
             <Textarea
               id="rule_check_in_out_time"
-              placeholder="Check in and check out time"
+              placeholder={data.rule_check_in_out_time}
               value={formData.rule_check_in_out_time}
               onChange={(e) => updateField('rule_check_in_out_time', e.target.value)}
               className="mt-1"
@@ -445,7 +592,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="rule_quiet_time">Quiet Time</Label>
             <Textarea
               id="rule_quiet_time"
-              placeholder="Quiet time range"
+              placeholder={data.rule_quiet_time}
               value={formData.rule_quiet_time}
               onChange={(e) => updateField('rule_quiet_time', e.target.value)}
               className="mt-1"
@@ -455,7 +602,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="rule_campfire">Campfire Rules</Label>
             <Textarea
               id="rule_campfire"
-              placeholder="Camp fire regulation"
+              placeholder={data.rule_campfire}
               value={formData.rule_campfire}
               onChange={(e) => updateField('rule_campfire', e.target.value)}
               className="mt-1"
@@ -465,7 +612,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="rule_pets">Pet Policy</Label>
             <Textarea
               id="rule_pets"
-              placeholder="Pets policy"
+              placeholder={data.rule_pets}
               value={formData.rule_pets}
               onChange={(e) => updateField('rule_pets', e.target.value)}
               className="mt-1"
@@ -475,7 +622,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="rule_wifi">WiFi Policy</Label>
             <Textarea
               id="rule_wifi"
-              placeholder="Wi-fi policy"
+              placeholder={data.rule_wifi}
               value={formData.rule_wifi}
               onChange={(e) => updateField('rule_wifi', e.target.value)}
               className="mt-1"
@@ -494,7 +641,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="cta_title">CTA Title</Label>
             <Textarea
               id="cta_title"
-              placeholder="Title to create interest in the park"
+              placeholder={data.cta_title}
               value={formData.cta_title}
               onChange={(e) => updateField('cta_title', e.target.value)}
               className="mt-1"
@@ -503,7 +650,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
           <div>
             <Label htmlFor="cta_subtitle">CTA Subtitle</Label>
             <Textarea
-              id="cta_subtitle"
+              id={data.cta_subtitle}
               placeholder="One-line call to action encouraging bookings or relaxing at the park"
               value={formData.cta_subtitle}
               onChange={(e) => updateField('cta_subtitle', e.target.value)}
@@ -523,7 +670,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
             <Label htmlFor="attractions_subtitle">Attractions Subtitle</Label>
             <Textarea
               id="attractions_subtitle"
-              placeholder="One brief sentence describing nearby activities and park location"
+              placeholder={data.activities_subtitle}
               value={formData.attractions_subtitle}
               onChange={(e) => updateField('attractions_subtitle', e.target.value)}
               className="mt-1"
@@ -532,7 +679,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
           
           <div>
             <Label>Attractions List</Label>
-            {formData.attractions.map((attraction, index) => (
+            {attractions.map((attraction, index) => (
               <div key={index} className="border p-4 rounded-lg mt-2">
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="font-medium">Attraction {index + 1}</h4>

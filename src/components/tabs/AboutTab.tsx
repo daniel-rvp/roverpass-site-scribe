@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -8,9 +8,10 @@ import { Save, Plus, Trash2, Upload } from 'lucide-react';
 
 interface AboutTabProps {
   onSave: (data: any) => void;
+  clientId: number
 }
 
-const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
+const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
   const [formData, setFormData] = useState({
     hero_image: '',
     hero_title: '',
@@ -72,6 +73,79 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
     onSave(formData);
   };
 
+  const [data, setData] = React.useState({
+    id : 0,
+    client_id : 0,
+    created_at : '',
+    cta_subtitle : '',
+    cta_title : '',
+    hero_image : '',
+    hero_subtitle : '',
+    hero_title : '',
+    intro_subtitle : '',
+    intro_title : '',
+  })
+  const [amenities, setAmenities] = React.useState([]);
+  const [accommodations, setAccomodations] = React.useState([]);
+
+  useEffect(() => {
+    const gatherAboutData = async () => {
+      await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/about?client_id=eq.${clientId}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setData(res[0]);
+      })
+      } 
+      
+    gatherAboutData();
+  }, [clientId])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatheAboutAmenitiesData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/about_amenity?about_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setAmenities(res);
+      })
+      }
+  
+      gatheAboutAmenitiesData();
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (data && data.id != 0) {
+      const gatherAboutAccommodationsData = async () => {
+        await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co//rest/v1/about_accommodation?about_id=eq.${data.id}`, {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        setAccomodations(res);
+      })
+      }
+
+      gatherAboutAccommodationsData();
+    }
+  }, [data])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -120,7 +194,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Label htmlFor="hero_title">Hero Title</Label>
             <Textarea
               id="hero_title"
-              placeholder="Title encouraging to go to the camp, mention the name."
+              placeholder={data.hero_title}
               value={formData.hero_title}
               onChange={(e) => updateField('hero_title', e.target.value)}
               className="mt-1"
@@ -130,7 +204,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Label htmlFor="hero_subtitle">Hero Subtitle</Label>
             <Textarea
               id="hero_subtitle"
-              placeholder="One clear, benefit-driven phrase that introduces the page and encourages guests to explore the accommodation options."
+              placeholder={data.hero_subtitle}
               value={formData.hero_subtitle}
               onChange={(e) => updateField('hero_subtitle', e.target.value)}
               className="mt-1"
@@ -149,7 +223,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Label htmlFor="intro_title">Introduction Title</Label>
             <Textarea
               id="intro_title"
-              placeholder="One short sentence that gathers all the amenities and vibe."
+              placeholder={data.intro_title}
               value={formData.intro_title}
               onChange={(e) => updateField('intro_title', e.target.value)}
               className="mt-1"
@@ -159,7 +233,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Label htmlFor="intro_subtitle">Introduction Subtitle</Label>
             <Textarea
               id="intro_subtitle"
-              placeholder="short 3-line paragraph introducing the park's accommodations. Mention variety (cabins, RV sites, tent sites, etc.), comfort, and access to amenities. Keep it general and location-relevant."
+              placeholder={data.intro_subtitle}
               value={formData.intro_subtitle}
               onChange={(e) => updateField('intro_subtitle', e.target.value)}
               className="mt-1"
@@ -176,7 +250,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
         <CardContent>
           <div>
             <Label>Amenities List</Label>
-            {formData.amenities.map((amenity, index) => (
+            {amenities.map((amenity, index) => (
               <div key={index} className="border p-4 rounded-lg mt-2">
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="font-medium">Amenity {index + 1}</h4>
@@ -224,7 +298,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
         <CardContent>
           <div>
             <Label>Accommodations List</Label>
-            {formData.accomodations.map((accommodation, index) => (
+            {accommodations.map((accommodation, index) => (
               <div key={index} className="border p-4 rounded-lg mt-2">
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="font-medium">Accommodation {index + 1}</h4>
@@ -303,7 +377,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Label htmlFor="cta_title">CTA Title</Label>
             <Textarea
               id="cta_title"
-              placeholder="Title to create interest in the park"
+              placeholder={data.cta_title}
               value={formData.cta_title}
               onChange={(e) => updateField('cta_title', e.target.value)}
               className="mt-1"
@@ -313,7 +387,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave }) => {
             <Label htmlFor="cta_subtitle">CTA Subtitle</Label>
             <Textarea
               id="cta_subtitle"
-              placeholder="One-line call to action encouraging bookings or relaxing at the park"
+              placeholder={data.cta_subtitle}
               value={formData.cta_subtitle}
               onChange={(e) => updateField('cta_subtitle', e.target.value)}
               className="mt-1"

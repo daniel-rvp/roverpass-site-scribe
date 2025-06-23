@@ -13,12 +13,14 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [clientId, setClientId] = useState(2); //! CAMBIAR EN DEPLOYMENT
 
   const handleLogin = (credentials: { username: string; password: string }) => {
     // Here you would typically validate credentials with your backend
     // For now, we'll accept any non-empty credentials
     if (credentials.username && credentials.password) {
       setIsAuthenticated(true);
+      setClientId(1);
       console.log('User logged in:', credentials.username);
     }
   };
@@ -42,7 +44,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Index clientId={clientId}/>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

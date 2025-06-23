@@ -1,8 +1,8 @@
 
 import Dashboard from '@/components/Dashboard';
 
-const Index = () => {
-  return <Dashboard />;
+const Index = ({ clientId }) => {
+  return <Dashboard clientId={clientId} />;
 };
 
 export default Index;

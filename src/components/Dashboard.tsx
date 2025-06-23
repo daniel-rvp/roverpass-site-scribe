@@ -13,7 +13,7 @@ import ContactTab from './tabs/ContactTab';
 import ReservationsTab from './tabs/ReservationsTab';
 import RulesTab from './tabs/RulesTab';
 
-const Dashboard = () => {
+const Dashboard = ({ clientId }) => {
   const [activeTab, setActiveTab] = useState('home');
 
   const handleSave = (pageData: any) => {
@@ -64,28 +64,28 @@ const Dashboard = () => {
 
               <div className="p-6">
                 <TabsContent value="home" className="mt-0">
-                  <HomeTab onSave={handleSave} />
+                  <HomeTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="about" className="mt-0">
-                  <AboutTab onSave={handleSave} />
+                  <AboutTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="accommodations" className="mt-0">
-                  <AccommodationsTab onSave={handleSave} />
+                  <AccommodationsTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="activities" className="mt-0">
-                  <ActivitiesTab onSave={handleSave} />
+                  <ActivitiesTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="amenities" className="mt-0">
-                  <AmenitiesTab onSave={handleSave} />
+                  <AmenitiesTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="contact" className="mt-0">
-                  <ContactTab onSave={handleSave} />
+                  <ContactTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="reservations" className="mt-0">
-                  <ReservationsTab onSave={handleSave} />
+                  <ReservationsTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="rules" className="mt-0">
-                  <RulesTab onSave={handleSave} />
+                  <RulesTab onSave={handleSave} clientId={clientId} />
                 </TabsContent>
               </div>
             </Tabs>
