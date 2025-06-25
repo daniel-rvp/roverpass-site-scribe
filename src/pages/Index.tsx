@@ -1,4 +1,3 @@
-
 import QuestionnaireForm from '@/components/QuestionnaireForm';
 import AppLayout from '@/components/AppLayout';
 import { AppSidebar } from '@/components/AppSidebar';
@@ -18,15 +17,15 @@ const QuestionnaireWithSidebar = () => {
     // Save current answer before switching
     const currentAnswer = answers[currentQuestion.toString()] || '';
     if (currentAnswer.trim()) {
-      setAnswers((prev: Record<string, string>) => ({
-        ...prev,
+      const newAnswers = {
+        ...answers,
         [currentQuestion.toString()]: currentAnswer
-      }));
-      setAnsweredQuestions((prev: Set<number>) => {
-        const newSet = new Set(prev);
-        newSet.add(currentQuestion);
-        return newSet;
-      });
+      };
+      setAnswers(newAnswers);
+      
+      const newAnsweredQuestions = new Set(answeredQuestions);
+      newAnsweredQuestions.add(currentQuestion);
+      setAnsweredQuestions(newAnsweredQuestions);
     }
 
     // Switch to clicked question

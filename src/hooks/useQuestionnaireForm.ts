@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { useQuestionnaire } from '@/contexts/QuestionnaireContext';
@@ -24,15 +23,15 @@ export const useQuestionnaireForm = () => {
 
   const saveCurrentAnswer = () => {
     if (currentAnswer.trim()) {
-      setAnswers((prev: Record<string, string>) => ({
-        ...prev,
+      const newAnswers = {
+        ...answers,
         [currentQuestion.toString()]: currentAnswer
-      }));
-      setAnsweredQuestions((prev: Set<number>) => {
-        const newSet = new Set(prev);
-        newSet.add(currentQuestion);
-        return newSet;
-      });
+      };
+      setAnswers(newAnswers);
+      
+      const newAnsweredQuestions = new Set(answeredQuestions);
+      newAnsweredQuestions.add(currentQuestion);
+      setAnsweredQuestions(newAnsweredQuestions);
     }
   };
 
