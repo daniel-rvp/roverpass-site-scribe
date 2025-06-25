@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import QuestionNavigation from './QuestionNavigation';
 
 const QUESTIONS = {
   "1": "What is the name of your campground?", 
@@ -56,16 +55,34 @@ const QuestionnaireForm = () => {
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentAnswer, setCurrentAnswer] = useState('');
+  const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set());
 
   const totalQuestions = Object.keys(QUESTIONS).length;
-  const progress = (currentQuestion / totalQuestions) * 100;
+
+  const handleQuestionClick = (questionNumber: number) => {
+    // Save current answer before switching
+    if (currentAnswer.trim()) {
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion.toString()]: currentAnswer
+      }));
+      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
+    }
+
+    // Switch to clicked question
+    setCurrentQuestion(questionNumber);
+    setCurrentAnswer(answers[questionNumber.toString()] || '');
+  };
 
   const handleNext = () => {
     // Save current answer
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.toString()]: currentAnswer
-    }));
+    if (currentAnswer.trim()) {
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion.toString()]: currentAnswer
+      }));
+      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
+    }
 
     if (currentQuestion < totalQuestions) {
       setCurrentQuestion(currentQuestion + 1);
@@ -75,10 +92,13 @@ const QuestionnaireForm = () => {
 
   const handlePrevious = () => {
     // Save current answer
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.toString()]: currentAnswer
-    }));
+    if (currentAnswer.trim()) {
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion.toString()]: currentAnswer
+      }));
+      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
+    }
 
     if (currentQuestion > 1) {
       setCurrentQuestion(currentQuestion - 1);
@@ -114,6 +134,11 @@ const QuestionnaireForm = () => {
       [currentQuestion.toString()]: currentAnswer
     };
 
+    const finalAnsweredQuestions = new Set([...answeredQuestions]);
+    if (currentAnswer.trim()) {
+      finalAnsweredQuestions.add(currentQuestion);
+    }
+
     try {
       // This is where the final submission API call would be made
       console.log('Submitting all answers:', finalAnswers);
@@ -133,22 +158,17 @@ const QuestionnaireForm = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-600">
-            Question {currentQuestion} of {totalQuestions}
-          </span>
-          <span className="text-sm font-medium text-gray-600">
-            {Math.round(progress)}% Complete
-          </span>
-        </div>
-        <Progress value={progress} className="h-2" />
-      </div>
+      <QuestionNavigation
+        totalQuestions={totalQuestions}
+        currentQuestion={currentQuestion}
+        answeredQuestions={answeredQuestions}
+        onQuestionClick={handleQuestionClick}
+      />
 
       <Card className="shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-green-600 text-white">
           <CardTitle className="text-xl">
-            Question {currentQuestion}
+            Question {currentQuestion} of {totalQuestions}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
