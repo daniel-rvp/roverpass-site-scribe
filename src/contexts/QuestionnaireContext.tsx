@@ -1,13 +1,13 @@
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
 
 interface QuestionnaireContextType {
   currentQuestion: number;
-  setCurrentQuestion: (question: number) => void;
+  setCurrentQuestion: Dispatch<SetStateAction<number>>;
   answeredQuestions: Set<number>;
-  setAnsweredQuestions: (questions: Set<number>) => void;
+  setAnsweredQuestions: Dispatch<SetStateAction<Set<number>>>;
   answers: Record<string, string>;
-  setAnswers: (answers: Record<string, string>) => void;
+  setAnswers: Dispatch<SetStateAction<Record<string, string>>>;
 }
 
 const QuestionnaireContext = createContext<QuestionnaireContextType | undefined>(undefined);
