@@ -18,11 +18,11 @@ const QuestionnaireWithSidebar = () => {
     // Save current answer before switching
     const currentAnswer = answers[currentQuestion.toString()] || '';
     if (currentAnswer.trim()) {
-      setAnswers(prev => ({
+      setAnswers((prev: Record<string, string>) => ({
         ...prev,
         [currentQuestion.toString()]: currentAnswer
       }));
-      setAnsweredQuestions(prev => {
+      setAnsweredQuestions((prev: Set<number>) => {
         const newSet = new Set(prev);
         newSet.add(currentQuestion);
         return newSet;

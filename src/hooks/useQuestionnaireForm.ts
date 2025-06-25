@@ -24,11 +24,11 @@ export const useQuestionnaireForm = () => {
 
   const saveCurrentAnswer = () => {
     if (currentAnswer.trim()) {
-      setAnswers(prev => ({
+      setAnswers((prev: Record<string, string>) => ({
         ...prev,
         [currentQuestion.toString()]: currentAnswer
       }));
-      setAnsweredQuestions(prev => {
+      setAnsweredQuestions((prev: Set<number>) => {
         const newSet = new Set(prev);
         newSet.add(currentQuestion);
         return newSet;
