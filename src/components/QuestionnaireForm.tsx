@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import QuestionNavigation from './QuestionNavigation';
+import { useQuestionnaire } from '@/contexts/QuestionnaireContext';
 
 const QUESTIONS = {
   "1": "What is the name of your campground?", 
@@ -52,15 +52,19 @@ const QUESTIONS = {
 };
 
 const QuestionnaireForm = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [currentAnswer, setCurrentAnswer] = useState('');
-  const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set());
-
+  const {
+    currentQuestion,
+    setCurrentQuestion,
+    answeredQuestions,
+    setAnsweredQuestions,
+    answers,
+    setAnswers,
+  } = useQuestionnaire();
+  
+  const [currentAnswer, setCurrentAnswer] = useState(answers[currentQuestion.toString()] || '');
   const totalQuestions = Object.keys(QUESTIONS).length;
 
-  const handleQuestionClick = (questionNumber: number) => {
-    // Save current answer before switching
+  const saveCurrentAnswer = () => {
     if (currentAnswer.trim()) {
       setAnswers(prev => ({
         ...prev,
@@ -68,47 +72,28 @@ const QuestionnaireForm = () => {
       }));
       setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
     }
-
-    // Switch to clicked question
-    setCurrentQuestion(questionNumber);
-    setCurrentAnswer(answers[questionNumber.toString()] || '');
   };
 
   const handleNext = () => {
-    // Save current answer
-    if (currentAnswer.trim()) {
-      setAnswers(prev => ({
-        ...prev,
-        [currentQuestion.toString()]: currentAnswer
-      }));
-      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
-    }
-
+    saveCurrentAnswer();
     if (currentQuestion < totalQuestions) {
-      setCurrentQuestion(currentQuestion + 1);
-      setCurrentAnswer(answers[(currentQuestion + 1).toString()] || '');
+      const nextQuestion = currentQuestion + 1;
+      setCurrentQuestion(nextQuestion);
+      setCurrentAnswer(answers[nextQuestion.toString()] || '');
     }
   };
 
   const handlePrevious = () => {
-    // Save current answer
-    if (currentAnswer.trim()) {
-      setAnswers(prev => ({
-        ...prev,
-        [currentQuestion.toString()]: currentAnswer
-      }));
-      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
-    }
-
+    saveCurrentAnswer();
     if (currentQuestion > 1) {
-      setCurrentQuestion(currentQuestion - 1);
-      setCurrentAnswer(answers[(currentQuestion - 1).toString()] || '');
+      const prevQuestion = currentQuestion - 1;
+      setCurrentQuestion(prevQuestion);
+      setCurrentAnswer(answers[prevQuestion.toString()] || '');
     }
   };
 
   const handleSend = async () => {
     try {
-      // This is where the API call would be made to check the question
       console.log('Sending question for review:', {
         question: currentQuestion,
         answer: currentAnswer
@@ -128,19 +113,12 @@ const QuestionnaireForm = () => {
   };
 
   const handleSubmit = async () => {
-    // Save final answer
     const finalAnswers = {
       ...answers,
       [currentQuestion.toString()]: currentAnswer
     };
 
-    const finalAnsweredQuestions = new Set([...answeredQuestions]);
-    if (currentAnswer.trim()) {
-      finalAnsweredQuestions.add(currentQuestion);
-    }
-
     try {
-      // This is where the final submission API call would be made
       console.log('Submitting all answers:', finalAnswers);
       
       toast({
@@ -158,13 +136,6 @@ const QuestionnaireForm = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <QuestionNavigation
-        totalQuestions={totalQuestions}
-        currentQuestion={currentQuestion}
-        answeredQuestions={answeredQuestions}
-        onQuestionClick={handleQuestionClick}
-      />
-
       <Card className="shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-green-600 text-white">
           <CardTitle className="text-xl">

@@ -1,18 +1,59 @@
 
-import { useState } from 'react';
 import QuestionnaireForm from '@/components/QuestionnaireForm';
+import AppLayout from '@/components/AppLayout';
+import { AppSidebar } from '@/components/AppSidebar';
+import { QuestionnaireProvider, useQuestionnaire } from '@/contexts/QuestionnaireContext';
+
+const QuestionnaireWithSidebar = () => {
+  const {
+    currentQuestion,
+    setCurrentQuestion,
+    answeredQuestions,
+    setAnsweredQuestions,
+    answers,
+    setAnswers,
+  } = useQuestionnaire();
+
+  const handleQuestionClick = (questionNumber: number) => {
+    // Save current answer before switching
+    const currentAnswer = answers[currentQuestion.toString()] || '';
+    if (currentAnswer.trim()) {
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion.toString()]: currentAnswer
+      }));
+      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
+    }
+
+    // Switch to clicked question
+    setCurrentQuestion(questionNumber);
+  };
+
+  return (
+    <AppLayout>
+      <AppSidebar
+        totalQuestions={42}
+        currentQuestion={currentQuestion}
+        answeredQuestions={answeredQuestions}
+        onQuestionClick={handleQuestionClick}
+      />
+      <div className="bg-gradient-to-br from-blue-50 to-green-50 min-h-full">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-8">
+            <p className="text-lg text-gray-600">Help us create the perfect website for your RV park</p>
+          </div>
+          <QuestionnaireForm />
+        </div>
+      </div>
+    </AppLayout>
+  );
+};
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">RoverPass Website Creation</h1>
-          <p className="text-lg text-gray-600">Help us create the perfect website for your RV park</p>
-        </div>
-        <QuestionnaireForm />
-      </div>
-    </div>
+    <QuestionnaireProvider>
+      <QuestionnaireWithSidebar />
+    </QuestionnaireProvider>
   );
 };
 
