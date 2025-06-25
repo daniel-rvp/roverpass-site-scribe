@@ -28,7 +28,11 @@ export const useQuestionnaireForm = () => {
         ...prev,
         [currentQuestion.toString()]: currentAnswer
       }));
-      setAnsweredQuestions(prev => new Set([...prev, currentQuestion]));
+      setAnsweredQuestions(prev => {
+        const newSet = new Set(prev);
+        newSet.add(currentQuestion);
+        return newSet;
+      });
     }
   };
 
