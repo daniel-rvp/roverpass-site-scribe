@@ -40,7 +40,7 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave }) => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Contact Information</CardTitle>
+          <CardTitle className="text-lg text-primary">Contact Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
