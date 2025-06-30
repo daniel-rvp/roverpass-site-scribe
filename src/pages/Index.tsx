@@ -1,15 +1,24 @@
 
 import { useState } from 'react';
 import QuestionnaireForm from '@/components/QuestionnaireForm';
+import Navbar from '@/components/Navbar';
 
 const Index = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  const handleQuestionSelect = (questionNumber: number) => {
+    setCurrentQuestion(questionNumber);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">RoverPass Website Creation</h1>
-          <p className="text-lg text-gray-600">Help us create the perfect website for your RV park</p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar 
+        currentQuestion={currentQuestion}
+        answers={answers}
+        onQuestionSelect={handleQuestionSelect}
+      />
+      <div className="py-8">
         <QuestionnaireForm />
       </div>
     </div>
