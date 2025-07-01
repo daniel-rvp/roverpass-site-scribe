@@ -1,11 +1,13 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useParams } from "react-router-dom";
+
+const BASE_URL = 'http://127.0.0.1:8000/'
 
 const QUESTIONS = {
   "1": "What is the name of your campground?", 
@@ -53,15 +55,18 @@ const QUESTIONS = {
 };
 
 const QuestionnaireForm = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const routeParams = useParams();
+
+  const [currentQuestion, setCurrentQuestion] = useState(41);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentAnswer, setCurrentAnswer] = useState('');
+  const [checked, setChecked] = useState(false);
+  const [send, setSend] = useState(false)
 
   const totalQuestions = Object.keys(QUESTIONS).length;
   const progress = (currentQuestion / totalQuestions) * 100;
 
   const handleNext = () => {
-    // Save current answer
     setAnswers(prev => ({
       ...prev,
       [currentQuestion.toString()]: currentAnswer
@@ -74,7 +79,6 @@ const QuestionnaireForm = () => {
   };
 
   const handlePrevious = () => {
-    // Save current answer
     setAnswers(prev => ({
       ...prev,
       [currentQuestion.toString()]: currentAnswer
@@ -88,34 +92,58 @@ const QuestionnaireForm = () => {
 
   const handleSend = async () => {
     try {
-      // This is where the API call would be made to check the question
-      console.log('Sending question for review:', {
-        question: currentQuestion,
-        answer: currentAnswer
+      setSend(true);
+
+      const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${routeParams.fid}`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              answer: currentAnswer
+          })
       });
-      
-      toast({
-        title: "Question sent for review",
-        description: "Your answer has been submitted for review.",
-      });
+
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
+      }
+
+      const responseData = await response.json();
+      console.log("API Response (handleSend):", responseData);
+
+      if (responseData && typeof responseData.checked !== 'undefined') {
+        setChecked(responseData.checked);
+        toast({
+          title: "Success",
+          description: "Answer sent for review!",
+        });
+      } else {
+        console.warn("API response did not contain 'checked' property:", responseData);
+        toast({
+          title: "Warning",
+          description: "Answer sent, but 'checked' status not received.",
+          variant: "default",
+        });
+      }
+
     } catch (error) {
+      console.error("Error sending question:", error);
       toast({
         title: "Error",
-        description: "Failed to send question for review. Please try again.",
+        description: `Failed to send question for review. Please try again. ${error.message || ''}`,
         variant: "destructive",
       });
+    } finally {
+      setSend(false);
     }
   };
 
   const handleSubmit = async () => {
-    // Save final answer
     const finalAnswers = {
       ...answers,
       [currentQuestion.toString()]: currentAnswer
     };
 
     try {
-      // This is where the final submission API call would be made
       console.log('Submitting all answers:', finalAnswers);
       
       toast({
@@ -130,6 +158,54 @@ const QuestionnaireForm = () => {
       });
     }
   };
+
+  useEffect(() => {
+    const fetchCurrentAnswer = async () => {
+      setSend(true);
+      try {
+        const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${routeParams.fid}`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
+        }
+
+        const res = await response.json();
+        console.log("Fetched existing answer:", res);
+
+        setChecked(res.checked);
+
+        if (res.answer !== undefined && res.answer !== null) {
+          setCurrentAnswer(res.answer);
+        } else {
+          setCurrentAnswer('');
+        }
+      } catch (error) {
+        console.error("Error fetching current answer:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load question details. Please try again.",
+          variant: "destructive",
+        });
+        setCurrentAnswer('');
+        setChecked(false);
+      } finally {
+        setSend(false);
+      }
+    };
+
+    if (routeParams.fid) {
+      fetchCurrentAnswer();
+    } else {
+        setCurrentAnswer('');
+        setChecked(false);
+        setSend(false);
+    }
+  }, [currentQuestion, routeParams.fid]);
+
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -168,7 +244,7 @@ const QuestionnaireForm = () => {
             <div className="flex gap-3">
               <Button
                 onClick={handlePrevious}
-                disabled={currentQuestion === 1}
+                disabled={currentQuestion === 1 || send}
                 variant="outline"
                 className="flex items-center gap-2"
               >
@@ -180,6 +256,7 @@ const QuestionnaireForm = () => {
                 onClick={handleSend}
                 variant="secondary"
                 className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-700"
+                disabled={send || !currentAnswer.trim()}
               >
                 <Send size={16} />
                 Send for Review
@@ -189,6 +266,7 @@ const QuestionnaireForm = () => {
             <div>
               {currentQuestion === totalQuestions ? (
                 <Button
+                  disabled={!checked || send}
                   onClick={handleSubmit}
                   className="bg-green-600 hover:bg-green-700 text-white px-8"
                 >
@@ -196,6 +274,7 @@ const QuestionnaireForm = () => {
                 </Button>
               ) : (
                 <Button
+                  disabled={!checked || send}
                   onClick={handleNext}
                   className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
                 >
