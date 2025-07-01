@@ -73,8 +73,7 @@ const QuestionnaireForm = () => {
     }));
 
     if (currentQuestion < totalQuestions) {
-      setCurrentQuestion(currentQuestion + 1);
-      setCurrentAnswer(answers[(currentQuestion + 1).toString()] || '');
+      onQuestionChange(currentQuestion + 1);
     }
   };
 
@@ -85,8 +84,7 @@ const QuestionnaireForm = () => {
     }));
 
     if (currentQuestion > 1) {
-      setCurrentQuestion(currentQuestion - 1);
-      setCurrentAnswer(answers[(currentQuestion - 1).toString()] || '');
+      onQuestionChange(currentQuestion - 1);
     }
   };
 
@@ -222,7 +220,7 @@ const QuestionnaireForm = () => {
       </div>
 
       <Card className="shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-blue-600 to-green-600 text-white">
+        <CardHeader className="bg-gradient-to-r from-primary-500 to-primary-400 text-white">
           <CardTitle className="text-xl">
             Question {currentQuestion}
           </CardTitle>
@@ -236,7 +234,7 @@ const QuestionnaireForm = () => {
               value={currentAnswer}
               onChange={(e) => setCurrentAnswer(e.target.value)}
               placeholder="Please provide your answer here..."
-              className="min-h-[150px] resize-none border-2 border-gray-200 focus:border-blue-500 transition-colors"
+              className="min-h-[150px] resize-none border-2 border-gray-200 focus:border-primary-400 transition-colors"
             />
           </div>
 
@@ -246,7 +244,7 @@ const QuestionnaireForm = () => {
                 onClick={handlePrevious}
                 disabled={currentQuestion === 1 || send}
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 hover:bg-primary-50 hover:border-primary-300"
               >
                 <ChevronLeft size={16} />
                 Previous
@@ -255,6 +253,7 @@ const QuestionnaireForm = () => {
               <Button
                 onClick={handleSend}
                 variant="secondary"
+                className="flex items-center gap-2 bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-200"
                 className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-700"
                 disabled={send || !currentAnswer.trim()}
               >
@@ -268,7 +267,7 @@ const QuestionnaireForm = () => {
                 <Button
                   disabled={!checked || send}
                   onClick={handleSubmit}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8"
+                  className="bg-primary-500 hover:bg-primary-600 text-white px-8"
                 >
                   Submit Questionnaire
                 </Button>
@@ -276,7 +275,7 @@ const QuestionnaireForm = () => {
                 <Button
                   disabled={!checked || send}
                   onClick={handleNext}
-                  className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                  className="bg-primary-500 hover:bg-primary-600 text-white flex items-center gap-2"
                 >
                   Next
                   <ChevronRight size={16} />
