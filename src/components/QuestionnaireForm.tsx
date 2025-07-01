@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,43 +52,47 @@ const QUESTIONS = {
   "42": "Anything else you would like to add that you feel we have missed in this questionnaire?"
 };
 
-const QuestionnaireForm = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+interface QuestionnaireFormProps {
+  currentQuestion: number;
+  answers: Record<string, string>;
+  onQuestionChange: (questionNumber: number) => void;
+  onAnswersChange: (answers: Record<string, string>) => void;
+}
+
+const QuestionnaireForm = ({ currentQuestion, answers, onQuestionChange, onAnswersChange }: QuestionnaireFormProps) => {
   const [currentAnswer, setCurrentAnswer] = useState('');
 
   const totalQuestions = Object.keys(QUESTIONS).length;
   const progress = (currentQuestion / totalQuestions) * 100;
 
-  const handleNext = () => {
-    // Save current answer
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.toString()]: currentAnswer
-    }));
+  // Update current answer when question changes
+  useEffect(() => {
+    setCurrentAnswer(answers[currentQuestion.toString()] || '');
+  }, [currentQuestion, answers]);
 
+  // Update answers when current answer changes
+  useEffect(() => {
+    const updatedAnswers = {
+      ...answers,
+      [currentQuestion.toString()]: currentAnswer
+    };
+    onAnswersChange(updatedAnswers);
+  }, [currentAnswer]);
+
+  const handleNext = () => {
     if (currentQuestion < totalQuestions) {
-      setCurrentQuestion(currentQuestion + 1);
-      setCurrentAnswer(answers[(currentQuestion + 1).toString()] || '');
+      onQuestionChange(currentQuestion + 1);
     }
   };
 
   const handlePrevious = () => {
-    // Save current answer
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.toString()]: currentAnswer
-    }));
-
     if (currentQuestion > 1) {
-      setCurrentQuestion(currentQuestion - 1);
-      setCurrentAnswer(answers[(currentQuestion - 1).toString()] || '');
+      onQuestionChange(currentQuestion - 1);
     }
   };
 
   const handleSend = async () => {
     try {
-      // This is where the API call would be made to check the question
       console.log('Sending question for review:', {
         question: currentQuestion,
         answer: currentAnswer
@@ -108,15 +112,8 @@ const QuestionnaireForm = () => {
   };
 
   const handleSubmit = async () => {
-    // Save final answer
-    const finalAnswers = {
-      ...answers,
-      [currentQuestion.toString()]: currentAnswer
-    };
-
     try {
-      // This is where the final submission API call would be made
-      console.log('Submitting all answers:', finalAnswers);
+      console.log('Submitting all answers:', answers);
       
       toast({
         title: "Questionnaire submitted!",
@@ -129,17 +126,6 @@ const QuestionnaireForm = () => {
         variant: "destructive",
       });
     }
-  };
-
-  const handleQuestionSelect = (questionNumber: number) => {
-    // Save current answer before switching
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.toString()]: currentAnswer
-    }));
-
-    setCurrentQuestion(questionNumber);
-    setCurrentAnswer(answers[questionNumber.toString()] || '');
   };
 
   return (

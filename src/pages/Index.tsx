@@ -11,6 +11,10 @@ const Index = () => {
     setCurrentQuestion(questionNumber);
   };
 
+  const handleAnswersChange = (newAnswers: Record<string, string>) => {
+    setAnswers(newAnswers);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar 
@@ -19,7 +23,12 @@ const Index = () => {
         onQuestionSelect={handleQuestionSelect}
       />
       <div className="py-8">
-        <QuestionnaireForm />
+        <QuestionnaireForm 
+          currentQuestion={currentQuestion}
+          answers={answers}
+          onQuestionChange={setCurrentQuestion}
+          onAnswersChange={handleAnswersChange}
+        />
       </div>
     </div>
   );
