@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -88,10 +89,17 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave }) => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-800">Home Page Content</h2>
-        <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
-          <Save className="w-4 h-4 mr-2" />
-          Save Changes
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button onClick={handleSave}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Changes
+          </Button>
+          <img 
+            src="/placeholder.svg" 
+            alt="Logo" 
+            className="h-10"
+          />
+        </div>
       </div>
 
       {/* Hero Section */}
