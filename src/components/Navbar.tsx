@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { Menu, CheckCircle, Circle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 const QUESTIONS = {
   "1": "What is the name of your campground?", 
@@ -92,8 +93,8 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
-            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-              <DropdownMenuTrigger asChild>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
                 <Button 
                   variant="outline" 
                   size="sm"
@@ -102,14 +103,11 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
                   <Menu className="h-4 w-4" />
                   <span>Questions</span>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                className="w-80 max-h-96 overflow-y-auto bg-white border border-gray-200 shadow-lg z-50"
-                align="start"
-              >
-                <div className="p-2 border-b border-gray-100">
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span className="font-medium">Question Navigation</span>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-80 sm:w-96">
+                <SheetHeader>
+                  <SheetTitle>Question Navigation</SheetTitle>
+                  <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
                     <div className="flex items-center space-x-3 text-xs">
                       <div className="flex items-center space-x-1">
                         <CheckCircle className="h-3 w-3 text-green-500" />
@@ -125,40 +123,42 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
                       </div>
                     </div>
                   </div>
-                </div>
-                {Object.entries(QUESTIONS).map(([questionNumber, questionText]) => {
-                  const qNum = parseInt(questionNumber);
-                  const status = getQuestionStatus(qNum);
-                  
-                  return (
-                    <DropdownMenuItem
-                      key={questionNumber}
-                      onClick={() => {
-                        onQuestionSelect(qNum);
-                        setIsOpen(false);
-                      }}
-                      className={`flex items-start space-x-3 p-3 hover:bg-primary-50 cursor-pointer ${
-                        status === 'current' ? 'bg-primary-50 border-l-2 border-primary-400' : ''
-                      }`}
-                    >
-                      <div className="flex-shrink-0 mt-1">
-                        {getStatusIcon(status)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm font-medium text-gray-900">
-                            Q{questionNumber}
-                          </span>
+                </SheetHeader>
+                <div className="mt-6 space-y-2">
+                  {Object.entries(QUESTIONS).map(([questionNumber, questionText]) => {
+                    const qNum = parseInt(questionNumber);
+                    const status = getQuestionStatus(qNum);
+                    
+                    return (
+                      <div
+                        key={questionNumber}
+                        onClick={() => {
+                          onQuestionSelect(qNum);
+                          setIsOpen(false);
+                        }}
+                        className={`flex items-start space-x-3 p-3 hover:bg-primary-50 cursor-pointer rounded-md transition-colors ${
+                          status === 'current' ? 'bg-primary-50 border-l-4 border-primary-400' : ''
+                        }`}
+                      >
+                        <div className="flex-shrink-0 mt-1">
+                          {getStatusIcon(status)}
                         </div>
-                        <p className="text-sm text-gray-600 mt-1 leading-tight">
-                          {truncateQuestion(questionText)}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-medium text-gray-900">
+                              Q{questionNumber}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-1 leading-tight">
+                            {truncateQuestion(questionText)}
+                          </p>
+                        </div>
                       </div>
-                    </DropdownMenuItem>
-                  );
-                })}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    );
+                  })}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
 
           <div className="flex-1 text-center">
@@ -170,7 +170,13 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
             </p>
           </div>
 
-          <div className="w-24" /> {/* Spacer for centering */}
+          <div className="flex items-center">
+            <img 
+              src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=40&h=40&fit=crop&crop=center" 
+              alt="Logo" 
+              className="h-10 w-auto"
+            />
+          </div>
         </div>
       </div>
     </nav>
