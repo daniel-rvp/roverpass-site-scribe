@@ -1,14 +1,15 @@
-
 import { useState } from 'react';
 import { Menu, CheckCircle, Circle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 
 const QUESTIONS = {
   "1": "What is the name of your campground?", 
@@ -78,7 +79,7 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
       case 'answered':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'current':
-        return <Clock className="h-4 w-4 text-primary-400" />;
+        return <Clock className="h-4 w-4 text-red-400" />;
       default:
         return <Circle className="h-4 w-4 text-gray-400" />;
     }
@@ -93,20 +94,20 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
+            <Drawer open={isOpen} onOpenChange={setIsOpen}>
+              <DrawerTrigger asChild>
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="flex items-center space-x-2 hover:bg-primary-50 hover:border-primary-300"
+                  className="flex items-center space-x-2 hover:bg-red-50 hover:border-red-300"
                 >
                   <Menu className="h-4 w-4" />
                   <span>Questions</span>
                 </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-80 sm:w-96">
-                <SheetHeader>
-                  <SheetTitle>Question Navigation</SheetTitle>
+              </DrawerTrigger>
+              <DrawerContent className="h-[85vh]">
+                <DrawerHeader>
+                  <DrawerTitle>Question Navigation</DrawerTitle>
                   <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
                     <div className="flex items-center space-x-3 text-xs">
                       <div className="flex items-center space-x-1">
@@ -114,7 +115,7 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
                         <span>Answered</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Clock className="h-3 w-3 text-primary-400" />
+                        <Clock className="h-3 w-3 text-red-400" />
                         <span>Current</span>
                       </div>
                       <div className="flex items-center space-x-1">
@@ -123,42 +124,44 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
                       </div>
                     </div>
                   </div>
-                </SheetHeader>
-                <div className="mt-6 space-y-2">
-                  {Object.entries(QUESTIONS).map(([questionNumber, questionText]) => {
-                    const qNum = parseInt(questionNumber);
-                    const status = getQuestionStatus(qNum);
-                    
-                    return (
-                      <div
-                        key={questionNumber}
-                        onClick={() => {
-                          onQuestionSelect(qNum);
-                          setIsOpen(false);
-                        }}
-                        className={`flex items-start space-x-3 p-3 hover:bg-primary-50 cursor-pointer rounded-md transition-colors ${
-                          status === 'current' ? 'bg-primary-50 border-l-4 border-primary-400' : ''
-                        }`}
-                      >
-                        <div className="flex-shrink-0 mt-1">
-                          {getStatusIcon(status)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-900">
-                              Q{questionNumber}
-                            </span>
+                </DrawerHeader>
+                <ScrollArea className="flex-1 px-4">
+                  <div className="space-y-2 pb-4">
+                    {Object.entries(QUESTIONS).map(([questionNumber, questionText]) => {
+                      const qNum = parseInt(questionNumber);
+                      const status = getQuestionStatus(qNum);
+                      
+                      return (
+                        <div
+                          key={questionNumber}
+                          onClick={() => {
+                            onQuestionSelect(qNum);
+                            setIsOpen(false);
+                          }}
+                          className={`flex items-start space-x-3 p-3 hover:bg-red-50 cursor-pointer rounded-md transition-colors ${
+                            status === 'current' ? 'bg-red-50 border-l-4 border-red-400' : ''
+                          }`}
+                        >
+                          <div className="flex-shrink-0 mt-1">
+                            {getStatusIcon(status)}
                           </div>
-                          <p className="text-sm text-gray-600 mt-1 leading-tight">
-                            {truncateQuestion(questionText)}
-                          </p>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm font-medium text-gray-900">
+                                Q{questionNumber}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1 leading-tight">
+                              {truncateQuestion(questionText)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </SheetContent>
-            </Sheet>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              </DrawerContent>
+            </Drawer>
           </div>
 
           <div className="flex-1 text-center">
