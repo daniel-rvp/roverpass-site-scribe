@@ -35,31 +35,38 @@ const Dashboard = ({ clientId }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-red-50">
       <div className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-800 mb-2">RoverPass Premium Website Dashboard</h1>
-          <p className="text-slate-600 text-lg">Manage your website content with ease. Each tab corresponds to a page on your website.</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold text-slate-800 mb-2">RoverPass Premium Website Dashboard</h1>
+            <p className="text-slate-600 text-lg">Manage your website content with ease. Each tab corresponds to a page on your website.</p>
+          </div>
+          <img 
+            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=200&h=200&fit=crop&crop=center" 
+            alt="Logo" 
+            className="h-10 w-auto object-contain"
+          />
         </div>
 
         <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+          <CardHeader className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-lg">
             <CardTitle className="text-2xl">Content Management</CardTitle>
-            <CardDescription className="text-blue-100">
+            <CardDescription className="text-primary-foreground/80">
               Edit your website content by selecting the appropriate page tab below
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 bg-slate-100 rounded-none border-b">
-                <TabsTrigger value="home" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Home</TabsTrigger>
-                <TabsTrigger value="about" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">About</TabsTrigger>
-                <TabsTrigger value="accommodations" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Accommodations</TabsTrigger>
-                <TabsTrigger value="activities" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Activities</TabsTrigger>
-                <TabsTrigger value="amenities" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Amenities</TabsTrigger>
-                <TabsTrigger value="contact" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Contact</TabsTrigger>
-                <TabsTrigger value="reservations" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Reservations</TabsTrigger>
-                <TabsTrigger value="rules" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Rules</TabsTrigger>
+                <TabsTrigger value="home" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Home</TabsTrigger>
+                <TabsTrigger value="about" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">About</TabsTrigger>
+                <TabsTrigger value="accommodations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Accommodations</TabsTrigger>
+                <TabsTrigger value="activities" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Activities</TabsTrigger>
+                <TabsTrigger value="amenities" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Amenities</TabsTrigger>
+                <TabsTrigger value="contact" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Contact</TabsTrigger>
+                <TabsTrigger value="reservations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Reservations</TabsTrigger>
+                <TabsTrigger value="rules" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Rules</TabsTrigger>
               </TabsList>
 
               <div className="p-6">
