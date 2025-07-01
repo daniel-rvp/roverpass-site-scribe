@@ -27,7 +27,6 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave, clientId }) => {
   };
 
   const handleSave = () => {
-    console.log(formData)
     fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/contact_us?id=eq.${clientId}`, {
       method: 'PATCH',
       headers: {
@@ -38,7 +37,6 @@ const ContactTab: React.FC<ContactTabProps> = ({ onSave, clientId }) => {
       body: JSON.stringify(formData)
     })
     .then(res => res.json())
-    .then(res => console.log(res))
   };
 
   const [data, setData] = React.useState({
