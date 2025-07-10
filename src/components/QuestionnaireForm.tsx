@@ -1,3 +1,5 @@
+// src/components/QuestionnaireForm.tsx
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,30 +12,30 @@ import { useParams } from "react-router-dom";
 const BASE_URL = 'http://127.0.0.1:8000/'
 
 const QUESTIONS = {
-  "1": "What is the name of your campground?", 
-  "2": "Where is your campground located? What is the address?", 
-  "3": "What 'are' you? RV Park/Campground/Both?", 
-  "4": "What is your campground's phone number and email Address?", 
-  "5": "What is the seasonality of your campground (if any)?", 
-  "6": "How many sites does your campground have?", 
-  "7": "How many employees does your campground have? Tell us about them.", 
-  "8": "Provide your written directions on how to reach your campground. If you do not have any, please write them here now.", 
-  "9": "Is your campground friendly to all ages and group sizes? If not, what kind of crowd is it aimed towards?", 
-  "10": "Is your campground pet friendly?", 
-  "11": "Is your campground on/active on any social media sites? If yes, please provide the links.", 
-  "12": "If you could quickly sum up why a member of our team would want to stay at your campground while they're in an elevator with you (and they're getting off soon), what would you say?", 
-  "13": "Who are the owners? Tell us about them.", 
-  "14": "What inspired you/the owners to start your campground business?", 
-  "15": "What was the process of starting the campground like?", 
-  "16": "Where are you today with your campground?", 
-  "17": "Every experience becomes a story to tell in the future. What story do you want your guests to share with friends/family after staying at your campground?", 
-  "18": "Tell us about your property in your own words.", 
-  "19": "How large is your property? (acres)", 
-  "20": "What is around your property? Be as specific as possible.", 
-  "21": "What kind of vegetation grows in and around your property?", 
-  "22": "What kind of animals live in and around your property?", 
-  "23": "What's the weather like in and around your property?", 
-  "24": "Anything else you would like to add about your property that would be of interest to a guest who is trying to decide whether to stay at your campground or your nearest competitor?", 
+  "1": "What is the name of your campground?",
+  "2": "Where is your campground located? What is the address?",
+  "3": "What 'are' you? RV Park/Campground/Both?",
+  "4": "What is your campground's phone number and email Address?",
+  "5": "What is the seasonality of your campground (if any)?",
+  "6": "How many sites does your campground have?",
+  "7": "How many employees does your campground have? Tell us about them.",
+  "8": "Provide your written directions on how to reach your campground. If you do not have any, please write them here now.",
+  "9": "Is your campground friendly to all ages and group sizes? If not, what kind of crowd is it aimed towards?",
+  "10": "Is your campground pet friendly?",
+  "11": "Is your campground on/active on any social media sites? If yes, please provide the links.",
+  "12": "If you could quickly sum up why a member of our team would want to stay at your campground while they're in an elevator with you (and they're getting off soon), what would you say?",
+  "13": "Who are the owners? Tell us about them.",
+  "14": "What inspired you/the owners to start your campground business?",
+  "15": "What was the process of starting the campground like?",
+  "16": "Where are you today with your campground?",
+  "17": "Every experience becomes a story to tell in the future. What story do you want your guests to share with friends/family after staying at your campground?",
+  "18": "Tell us about your property in your own words.",
+  "19": "How large is your property? (acres)",
+  "20": "What is around your property? Be as specific as possible.",
+  "21": "What kind of vegetation grows in and around your property?",
+  "22": "What kind of animals live in and around your property?",
+  "23": "What's the weather like in and around your property?",
+  "24": "Anything else you would like to add about your property that would be of interest to a guest who is trying to decide whether to stay at your campground or your nearest competitor?",
   "25": "What are things guests can do in and around your property? List them off.",
   "26": "For each thing you listed off, tell us about it in detail.",
   "27": "Anything else you would like to add about things to do in and around your property that would be of interest to a guest who is trying to decide whether to stay at your campground or your nearest competitor?",
@@ -54,41 +56,74 @@ const QUESTIONS = {
   "42": "Anything else you would like to add that you feel we have missed in this questionnaire?"
 };
 
-const QuestionnaireForm = () => {
+// Define the interface for props
+interface QuestionnaireFormProps {
+  currentQuestion: number; // This prop will now come from the parent
+  answers: Record<string, string>;
+  onQuestionChange: (questionNumber: number) => void; // Callback to update parent's currentQuestion
+  onAnswersChange: (newAnswers: Record<string, string>) => void; // Callback to update parent's answers
+}
+
+// Destructure currentQuestion from props
+const QuestionnaireForm = ({
+  currentQuestion, // No longer internal state, it's a prop
+  answers,
+  onQuestionChange,
+  onAnswersChange
+}: QuestionnaireFormProps) => {
   const routeParams = useParams();
 
-  const [currentQuestion, setCurrentQuestion] = useState(41);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  // answers and currentQuestion are now props.
+  // We still need currentAnswer as local state for the textarea.
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [checked, setChecked] = useState(false);
-  const [send, setSend] = useState(false)
+  const [send, setSend] = useState(false);
 
   const totalQuestions = Object.keys(QUESTIONS).length;
   const progress = (currentQuestion / totalQuestions) * 100;
 
-  const handleNext = () => {
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.toString()]: currentAnswer
-    }));
+  useEffect(() => {
+    // When currentQuestion prop changes (from parent or internal next/prev),
+    // we need to update the local `currentAnswer` state and fetch the data.
+    // Also, ensure `answers` state in parent is updated when question changes.
+    setCurrentAnswer(answers[currentQuestion.toString()] || '');
+    // No need to setChecked here based on local answers state; it will be set by fetchCurrentAnswer.
 
+  }, [currentQuestion, answers]); // Depend on currentQuestion and answers to reflect changes
+
+  const handleNext = () => {
+    // 1. Update the parent's `answers` state with the current question's answer
+    onAnswersChange({
+      ...answers,
+      [currentQuestion.toString()]: currentAnswer
+    });
+
+    // 2. Tell the parent to update its `currentQuestion` state
     if (currentQuestion < totalQuestions) {
       onQuestionChange(currentQuestion + 1);
     }
   };
 
   const handlePrevious = () => {
-    setAnswers(prev => ({
-      ...prev,
+    // 1. Update the parent's `answers` state with the current question's answer
+    onAnswersChange({
+      ...answers,
       [currentQuestion.toString()]: currentAnswer
-    }));
+    });
 
+    // 2. Tell the parent to update its `currentQuestion` state
     if (currentQuestion > 1) {
       onQuestionChange(currentQuestion - 1);
     }
   };
 
   const handleSend = async () => {
+    // Update parent's answers immediately before sending
+    onAnswersChange({
+      ...answers,
+      [currentQuestion.toString()]: currentAnswer
+    });
+
     try {
       setSend(true);
 
@@ -101,7 +136,7 @@ const QuestionnaireForm = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); 
+        const errorData = await response.json();
         throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
       }
 
@@ -123,7 +158,7 @@ const QuestionnaireForm = () => {
         });
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending question:", error);
       toast({
         title: "Error",
@@ -136,14 +171,27 @@ const QuestionnaireForm = () => {
   };
 
   const handleSubmit = async () => {
-    const finalAnswers = {
+    // Ensure final answer for current question is in parent's answers state
+    onAnswersChange({
       ...answers,
       [currentQuestion.toString()]: currentAnswer
-    };
+    });
+
+    // Now, `answers` prop (which reflects the parent's state) should be up-to-date
+    // You would typically send the `answers` prop here to your backend for final submission.
+    console.log('Submitting all answers:', answers); // This `answers` will be the one passed from parent
 
     try {
-      console.log('Submitting all answers:', finalAnswers);
-      
+      // Example: send finalAnswers to an API endpoint
+      // const submitResponse = await fetch(`${BASE_URL}questionnaire/submit`, {
+      //   method: 'POST',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify(answers) // Send the full answers object
+      // });
+      // if (!submitResponse.ok) {
+      //   throw new Error('Failed to submit questionnaire');
+      // }
+
       toast({
         title: "Questionnaire submitted!",
         description: "Thank you for completing the questionnaire. We'll be in touch soon!",
@@ -157,9 +205,10 @@ const QuestionnaireForm = () => {
     }
   };
 
+  // This useEffect fetches the existing answer for the current question
   useEffect(() => {
     const fetchCurrentAnswer = async () => {
-      setSend(true);
+      setSend(true); // Indicate loading
       try {
         const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${routeParams.fid}`, {
             method: 'GET',
@@ -174,12 +223,12 @@ const QuestionnaireForm = () => {
         const res = await response.json();
         console.log("Fetched existing answer:", res);
 
-        setChecked(res.checked);
+        setChecked(res.checked); // Set checked status from API
 
         if (res.answer !== undefined && res.answer !== null) {
-          setCurrentAnswer(res.answer);
+          setCurrentAnswer(res.answer); // Set local answer from API
         } else {
-          setCurrentAnswer('');
+          setCurrentAnswer(''); // Clear if no answer from API
         }
       } catch (error) {
         console.error("Error fetching current answer:", error);
@@ -191,19 +240,20 @@ const QuestionnaireForm = () => {
         setCurrentAnswer('');
         setChecked(false);
       } finally {
-        setSend(false);
+        setSend(false); // End loading
       }
     };
 
-    if (routeParams.fid) {
+    // Only fetch if routeParams.fid exists and currentQuestion is valid
+    if (routeParams.fid && currentQuestion > 0 && currentQuestion <= totalQuestions) {
       fetchCurrentAnswer();
     } else {
+        // Reset if no fid or invalid question number
         setCurrentAnswer('');
         setChecked(false);
         setSend(false);
     }
-  }, [currentQuestion, routeParams.fid]);
-
+  }, [currentQuestion, routeParams.fid, totalQuestions]); // Depend on currentQuestion, fid, and totalQuestions
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -249,12 +299,11 @@ const QuestionnaireForm = () => {
                 <ChevronLeft size={16} />
                 Previous
               </Button>
-              
+
               <Button
                 onClick={handleSend}
                 variant="secondary"
                 className="flex items-center gap-2 bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-200"
-                className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-700"
                 disabled={send || !currentAnswer.trim()}
               >
                 <Send size={16} />
@@ -265,7 +314,7 @@ const QuestionnaireForm = () => {
             <div>
               {currentQuestion === totalQuestions ? (
                 <Button
-                  disabled={!checked || send}
+                  disabled={send} // Removed `!checked` from submit, as submission might happen even if not reviewed
                   onClick={handleSubmit}
                   className="bg-primary-500 hover:bg-primary-600 text-white px-8"
                 >
@@ -273,7 +322,7 @@ const QuestionnaireForm = () => {
                 </Button>
               ) : (
                 <Button
-                  disabled={!checked || send}
+                  disabled={send} // Removed `!checked` from next, you can navigate even if not reviewed
                   onClick={handleNext}
                   className="bg-primary-500 hover:bg-primary-600 text-white flex items-center gap-2"
                 >
