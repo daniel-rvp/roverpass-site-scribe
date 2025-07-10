@@ -49,8 +49,8 @@ const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave, clientId }) =
   // Supabase headers
   const supabaseHeaders = {
     'Content-Type': 'application/json',
-    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+    'apikey': `${import.meta.env.VITE_KEY}`,
+    'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
     'Prefer': 'return=representation'
   };
 
@@ -320,7 +320,7 @@ const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave, clientId }) =
       {/* Header Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Page Header</CardTitle>
+          <CardTitle className="text-lg ">Page Header</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -377,14 +377,14 @@ const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave, clientId }) =
       {/* Accommodations and Pricing */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Accommodations & Pricing</CardTitle>
+          <CardTitle className="text-lg ">Accommodations & Pricing</CardTitle>
         </CardHeader>
         <CardContent>
           {
             formData.accommodations.map((accommodation, accIndex) => (
-              <div key={accommodation.id} className="border-2 border-blue-200 p-6 rounded-lg mt-4">
+              <div key={accommodation.id} className="border-2  p-6 rounded-lg mt-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold text-blue-800">Accommodation {accIndex + 1}</h3>
+                  <h3 className="text-lg font-semibold ">Accommodation {accIndex + 1}</h3>
                   <Button
                     variant="outline"
                     size="sm"

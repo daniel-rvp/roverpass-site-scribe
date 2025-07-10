@@ -1,9 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Save, Plus, Trash2, Upload } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+)
 
 interface HeroAmenity {
   id: number | null;
@@ -76,8 +82,8 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
 
   const supabaseHeaders = {
     'Content-Type': 'application/json',
-    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+    'apikey': `${import.meta.env.VITE_KEY}`,
+    'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
     'Prefer': 'return=representation'
   };
 
@@ -325,6 +331,32 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
     }
   };
 
+  const handlePicture = async (event, filePath) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const fileName = `${clientId}/${filePath}/heroImage`;
+
+    const { data, error } = await supabase
+    .storage
+    .from('premium-websites-media')
+    .upload(fileName, file, {upsert: true})
+
+    if (data) {
+      const { data, error } = await supabase
+      .from('home')
+      .update({hero_image: `https://bmlrxdnnxhawrhncbvoz.supabase.co/storage/v1/object/public/${data.fullPath}`})
+      .eq('id', clientId)
+    } else {
+      console.log(error)
+    }
+  }
+
+  const heroImageInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -338,7 +370,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
+          <CardTitle className="text-lg ">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -349,16 +381,12 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    updateField('hero_image', file.name);
-                  }
-                }}
+                onChange={(e) => {handlePicture(e, 'home/hero/')}}
+                ref={heroImageInputRef}
               />
               <Button
                 variant="outline"
-                onClick={() => document.getElementById('hero_image')?.click()}
+                onClick={() => heroImageInputRef.current?.click()}
                 className="flex items-center"
               >
                 <Upload className="w-4 h-4 mr-2" />
@@ -426,7 +454,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Introduction Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Introduction Section</CardTitle>
+          <CardTitle className="text-lg ">Introduction Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -493,7 +521,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Activities Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Activities Section</CardTitle>
+          <CardTitle className="text-lg ">Activities Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -580,7 +608,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Amenities Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Amenities Section</CardTitle>
+          <CardTitle className="text-lg ">Amenities Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -668,7 +696,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Rules Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Park Rules</CardTitle>
+          <CardTitle className="text-lg ">Park Rules</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -727,7 +755,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
+          <CardTitle className="text-lg ">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -756,7 +784,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Attractions Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Nearby Attractions</CardTitle>
+          <CardTitle className="text-lg ">Nearby Attractions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
