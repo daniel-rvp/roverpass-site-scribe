@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useParams } from "react-router-dom";
 
-const BASE_URL = 'http://ai-app.roverpass.com/'
+const BASE_URL = 'https://ai-app.roverpass.com/'
 
 const QUESTIONS = {
   "1": "What is the name of your campground?",
@@ -161,7 +161,7 @@ const QuestionnaireForm = ({
         title: "Questionnaire submitted!",
         description: "Thank you for completing the questionnaire. We'll be in touch soon!",
       });
-      fetch(`http://ai-app.roverpass.com/questionnaire/content-generator/?fid=${clientId}`, {
+      fetch(`https://ai-app.roverpass.com/questionnaire/content-generator/?fid=${clientId}`, {
         method: 'GET'
       })
     } catch (error) {

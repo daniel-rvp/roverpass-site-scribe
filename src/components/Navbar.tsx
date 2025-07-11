@@ -61,7 +61,7 @@ const Navbar = ({ currentQuestion, answers, onQuestionSelect }: NavbarProps) => 
       setError(null);
 
       try {
-        const response = await fetch(`http://ai-app.roverpass.com/questionnaire/qas/?fid=${routeParams.clientIdParam}`, {
+        const response = await fetch(`https://ai-app.roverpass.com/questionnaire/qas/?fid=${routeParams.clientIdParam}`, {
           method: 'GET',
         });
 

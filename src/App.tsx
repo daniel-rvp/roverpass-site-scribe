@@ -24,7 +24,7 @@ const App = () => {
 
   const handleLogin = (credentials) => {
     if (credentials.username && credentials.password) {
-      fetch(`http://ai-app.roverpass.com/authentication/`, {
+      fetch(`https://ai-app.roverpass.com/authentication/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
