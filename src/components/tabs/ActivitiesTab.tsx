@@ -259,7 +259,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
+          <CardTitle className="text-lg ">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -306,7 +306,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Outdoor Activities List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Outdoor Activities</CardTitle>
+          <CardTitle className="text-lg ">Outdoor Activities</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(0).map((activity, index) => (
@@ -417,7 +417,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Family Activities */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Family Fun</CardTitle>
+          <CardTitle className="text-lg ">Family Fun</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(1).map((activity, index) => (
@@ -528,7 +528,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Arts & Culture */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Arts & Culture</CardTitle>
+          <CardTitle className="text-lg ">Arts & Culture</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(2).map((activity, index) => (
@@ -639,7 +639,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Front Desk Recommendations */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Front Desk Recommendations</CardTitle>
+          <CardTitle className="text-lg ">Front Desk Recommendations</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(3).map((activity, index) => (

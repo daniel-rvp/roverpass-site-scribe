@@ -319,7 +319,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave, clientId 
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
+          <CardTitle className="text-lg ">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -376,7 +376,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave, clientId 
       {/* Accommodations List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Accommodations List</CardTitle>
+          <CardTitle className="text-lg ">Accommodations List</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.accommodations_list.map((accommodation, accIndex) => (
@@ -505,7 +505,7 @@ const AccommodationsTab: React.FC<AccommodationsTabProps> = ({ onSave, clientId 
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
+          <CardTitle className="text-lg ">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

@@ -252,7 +252,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       {/* Header Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Page Header</CardTitle>
+          <CardTitle className="text-lg ">Page Header</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -289,7 +289,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       {/* Rules Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Rules List</CardTitle>
+          <CardTitle className="text-lg ">Rules List</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.rules.map((rule) => (
@@ -351,7 +351,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       {/* FAQs Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Frequently Asked Questions</CardTitle>
+          <CardTitle className="text-lg ">Frequently Asked Questions</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.faqs.map((faq) => (

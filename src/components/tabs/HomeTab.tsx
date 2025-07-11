@@ -338,7 +338,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
+          <CardTitle className="text-lg ">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -426,7 +426,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Introduction Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Introduction Section</CardTitle>
+          <CardTitle className="text-lg ">Introduction Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -493,7 +493,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Activities Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Activities Section</CardTitle>
+          <CardTitle className="text-lg ">Activities Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -580,7 +580,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Amenities Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Amenities Section</CardTitle>
+          <CardTitle className="text-lg ">Amenities Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -668,7 +668,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Rules Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Park Rules</CardTitle>
+          <CardTitle className="text-lg ">Park Rules</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -727,7 +727,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
+          <CardTitle className="text-lg ">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -756,7 +756,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
       {/* Attractions Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Nearby Attractions</CardTitle>
+          <CardTitle className="text-lg ">Nearby Attractions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

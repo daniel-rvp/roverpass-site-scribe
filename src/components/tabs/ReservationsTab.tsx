@@ -320,7 +320,7 @@ const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave, clientId }) =
       {/* Header Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Page Header</CardTitle>
+          <CardTitle className="text-lg ">Page Header</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -377,7 +377,7 @@ const ReservationsTab: React.FC<ReservationsTabProps> = ({ onSave, clientId }) =
       {/* Accommodations and Pricing */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Accommodations & Pricing</CardTitle>
+          <CardTitle className="text-lg ">Accommodations & Pricing</CardTitle>
         </CardHeader>
         <CardContent>
           {

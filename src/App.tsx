@@ -8,20 +8,69 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./components/LoginPage";
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+)
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [clientId, setClientId] = useState(2); //! CAMBIAR EN DEPLOYMENT
+  const [clientId, setClientId] = useState(0);
 
-  const handleLogin = (credentials: { username: string; password: string }) => {
-    // Here you would typically validate credentials with your backend
-    // For now, we'll accept any non-empty credentials
+
+  const handleLogin = (credentials) => {
     if (credentials.username && credentials.password) {
-      setIsAuthenticated(true);
-      setClientId(1);
-      console.log('User logged in:', credentials.username);
+      fetch(`https://ai-app.roverpass.com/authentication/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password
+        })
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(err => { throw new Error(err.detail || 'Login failed'); });
+        }
+        return res.json();
+      })
+      .then(async (djangoAuthResponse) => {
+        if (!djangoAuthResponse.token) {
+            throw new Error("Authentication failed: No token received.");
+        }
+
+        const { data: clientsData, error: supabaseError } = await supabase
+          .from('clients')
+          .select('id')
+          .eq('token', djangoAuthResponse.token);
+
+        if (supabaseError) {
+          console.error("Supabase error fetching client ID:", supabaseError.message);
+          throw new Error("Failed to verify client: " + supabaseError.message);
+        }
+
+        if (clientsData && clientsData.length > 0) {
+          const fetchedClientId = clientsData[0].id;
+          setClientId(fetchedClientId);
+          setIsAuthenticated(true);
+        } else {
+          console.error("No client found for the provided token in Supabase.");
+          setIsAuthenticated(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Login process failed:", err.message);
+        setIsAuthenticated(false);
+      });
+    } else {
+      console.warn("Username and password cannot be empty.");
+      setIsAuthenticated(false);
     }
   };
 

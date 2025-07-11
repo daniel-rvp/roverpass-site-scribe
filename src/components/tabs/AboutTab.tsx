@@ -332,7 +332,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
+          <CardTitle className="text-lg ">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -389,7 +389,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Introduction Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Introduction Section</CardTitle>
+          <CardTitle className="text-lg ">Introduction Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -418,7 +418,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Amenities Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Amenities</CardTitle>
+          <CardTitle className="text-lg ">Amenities</CardTitle>
         </CardHeader>
         <CardContent>
           <div>
@@ -466,7 +466,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Accommodations Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Accommodations</CardTitle>
+          <CardTitle className="text-lg ">Accommodations</CardTitle>
         </CardHeader>
         <CardContent>
           <div>
@@ -543,7 +543,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
+          <CardTitle className="text-lg ">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

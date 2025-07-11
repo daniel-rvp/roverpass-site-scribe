@@ -274,7 +274,7 @@ const gatherData = useCallback(async () => {
       {/* Header Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Header Section</CardTitle>
+          <CardTitle className="text-lg ">Header Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -321,7 +321,7 @@ const gatherData = useCallback(async () => {
       {/* Amenities List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Amenities List</CardTitle>
+          <CardTitle className="text-lg ">Amenities List</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.amenities.map((amenity, index) => ( // Iterate through formData.amenities
@@ -424,7 +424,7 @@ const gatherData = useCallback(async () => {
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
+          <CardTitle className="text-lg ">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
