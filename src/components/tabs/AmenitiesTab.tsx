@@ -42,8 +42,8 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({ onSave, clientId }) => {
 
   const supabaseHeaders = {
     'Content-Type': 'application/json',
-    'apikey': `${import.meta.env.VITE_KEY}`,
-    'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
+    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
     'Prefer': 'return=representation'
   };
 
@@ -274,7 +274,7 @@ const gatherData = useCallback(async () => {
       {/* Header Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Header Section</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Header Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -321,13 +321,13 @@ const gatherData = useCallback(async () => {
       {/* Amenities List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Amenities List</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Amenities List</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.amenities.map((amenity, index) => ( // Iterate through formData.amenities
-            <div key={`${amenity.id}-${index}`} className="border-2  p-4 rounded-lg mt-4">
+            <div key={`${amenity.id}-${index}`} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold ">Amenity {index + 1}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">Amenity {index + 1}</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -424,7 +424,7 @@ const gatherData = useCallback(async () => {
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Call to Action</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

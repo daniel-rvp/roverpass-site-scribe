@@ -18,6 +18,20 @@ const Dashboard = ({ clientId }) => {
 
   const handleSave = (pageData: any) => {
     console.log('Saving data for page:', activeTab, pageData);
+    // This is where you'll implement the fetch request to update your database
+    // Example fetch structure:
+    /*
+    fetch(`/api/update-${activeTab}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pageData)
+    })
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch(error => console.error('Error:', error));
+    */
   };
 
   return (
@@ -29,7 +43,7 @@ const Dashboard = ({ clientId }) => {
             <p className="text-slate-600 text-lg">Manage your website content with ease. Each tab corresponds to a page on your website.</p>
           </div>
           <img 
-            src="https://d21q6se01pvc3d.cloudfront.net/assets/logos/roverpass-logo-6ef4a70297c9f89675416cc4ae9e586c822b3ba2f245abc4fa76b6ca1bedc20e.svg" 
+            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=200&h=200&fit=crop&crop=center" 
             alt="Logo" 
             className="h-10 w-auto object-contain"
           />

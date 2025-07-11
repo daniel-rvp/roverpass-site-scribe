@@ -60,8 +60,8 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
   // Supabase headers
   const supabaseHeaders = {
     'Content-Type': 'application/json',
-    'apikey': `${import.meta.env.VITE_KEY}`,
-    'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
+    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
     'Prefer': 'return=representation'
   };
 
@@ -332,7 +332,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Hero Section</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -389,7 +389,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Introduction Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Introduction Section</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Introduction Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -418,7 +418,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Amenities Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Amenities</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Amenities</CardTitle>
         </CardHeader>
         <CardContent>
           <div>
@@ -466,7 +466,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Accommodations Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Accommodations</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Accommodations</CardTitle>
         </CardHeader>
         <CardContent>
           <div>
@@ -543,7 +543,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ onSave, clientId }) => {
       {/* Call to Action Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Call to Action</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Call to Action</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

@@ -41,8 +41,8 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
 
   const supabaseHeaders = {
     'Content-Type': 'application/json',
-    'apikey': `${import.meta.env.VITE_KEY}`,
-    'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
+    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
     'Prefer': 'return=representation'
   };
 
@@ -259,7 +259,7 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Hero Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Hero Section</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Hero Section</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -306,13 +306,13 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Outdoor Activities List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Outdoor Activities</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Outdoor Activities</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(0).map((activity, index) => (
-            <div key={activity.id} className="border-2  p-4 rounded-lg mt-4">
+            <div key={activity.id} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold ">Activity {index + 1}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">Activity {index + 1}</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -417,13 +417,13 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Family Activities */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Family Fun</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Family Fun</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(1).map((activity, index) => (
-            <div key={activity.id} className="border-2  p-4 rounded-lg mt-4">
+            <div key={activity.id} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold ">Activity {index + 1}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">Activity {index + 1}</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -528,13 +528,13 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Arts & Culture */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Arts & Culture</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Arts & Culture</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(2).map((activity, index) => (
-            <div key={activity.id} className="border-2  p-4 rounded-lg mt-4">
+            <div key={activity.id} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold ">Activity {index + 1}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">Activity {index + 1}</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -639,13 +639,13 @@ const ActivitiesTab: React.FC<ActivitiesTabProps> = ({ onSave, clientId }) => {
       {/* Front Desk Recommendations */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg ">Front Desk Recommendations</CardTitle>
+          <CardTitle className="text-lg text-blue-700">Front Desk Recommendations</CardTitle>
         </CardHeader>
         <CardContent>
           {getActivitiesByCategory(3).map((activity, index) => (
-            <div key={activity.id} className="border-2  p-4 rounded-lg mt-4">
+            <div key={activity.id} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold ">Activity {index + 1}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">Activity {index + 1}</h3>
                 <Button
                   variant="outline"
                   size="sm"

@@ -18,8 +18,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    onLogin({ username, password });
-    setIsLoading(false);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      onLogin({ username, password });
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
