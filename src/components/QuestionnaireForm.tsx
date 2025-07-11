@@ -1,5 +1,3 @@
-// src/components/QuestionnaireForm.tsx
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,7 +7,7 @@ import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useParams } from "react-router-dom";
 
-const BASE_URL = 'http://127.0.0.1:8000/'
+const BASE_URL = 'http://ai-app.roverpass.com/'
 
 const QUESTIONS = {
   "1": "What is the name of your campground?",
@@ -56,25 +54,15 @@ const QUESTIONS = {
   "42": "Anything else you would like to add that you feel we have missed in this questionnaire?"
 };
 
-// Define the interface for props
-interface QuestionnaireFormProps {
-  currentQuestion: number; // This prop will now come from the parent
-  answers: Record<string, string>;
-  onQuestionChange: (questionNumber: number) => void; // Callback to update parent's currentQuestion
-  onAnswersChange: (newAnswers: Record<string, string>) => void; // Callback to update parent's answers
-}
-
-// Destructure currentQuestion from props
 const QuestionnaireForm = ({
-  currentQuestion, // No longer internal state, it's a prop
+  currentQuestion,
   answers,
   onQuestionChange,
-  onAnswersChange
-}: QuestionnaireFormProps) => {
+  onAnswersChange,
+  clientId
+}) => {
   const routeParams = useParams();
 
-  // answers and currentQuestion are now props.
-  // We still need currentAnswer as local state for the textarea.
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [checked, setChecked] = useState(false);
   const [send, setSend] = useState(false);
@@ -83,42 +71,32 @@ const QuestionnaireForm = ({
   const progress = (currentQuestion / totalQuestions) * 100;
 
   useEffect(() => {
-    // When currentQuestion prop changes (from parent or internal next/prev),
-    // we need to update the local `currentAnswer` state and fetch the data.
-    // Also, ensure `answers` state in parent is updated when question changes.
     setCurrentAnswer(answers[currentQuestion.toString()] || '');
-    // No need to setChecked here based on local answers state; it will be set by fetchCurrentAnswer.
-
-  }, [currentQuestion, answers]); // Depend on currentQuestion and answers to reflect changes
+  }, [currentQuestion, answers]);
 
   const handleNext = () => {
-    // 1. Update the parent's `answers` state with the current question's answer
     onAnswersChange({
       ...answers,
       [currentQuestion.toString()]: currentAnswer
     });
 
-    // 2. Tell the parent to update its `currentQuestion` state
     if (currentQuestion < totalQuestions) {
       onQuestionChange(currentQuestion + 1);
     }
   };
 
   const handlePrevious = () => {
-    // 1. Update the parent's `answers` state with the current question's answer
     onAnswersChange({
       ...answers,
       [currentQuestion.toString()]: currentAnswer
     });
 
-    // 2. Tell the parent to update its `currentQuestion` state
     if (currentQuestion > 1) {
       onQuestionChange(currentQuestion - 1);
     }
   };
 
   const handleSend = async () => {
-    // Update parent's answers immediately before sending
     onAnswersChange({
       ...answers,
       [currentQuestion.toString()]: currentAnswer
@@ -127,7 +105,7 @@ const QuestionnaireForm = ({
     try {
       setSend(true);
 
-      const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${routeParams.fid}`, {
+      const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${clientId}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -158,7 +136,7 @@ const QuestionnaireForm = ({
         });
       }
 
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error sending question:", error);
       toast({
         title: "Error",
@@ -171,31 +149,21 @@ const QuestionnaireForm = ({
   };
 
   const handleSubmit = async () => {
-    // Ensure final answer for current question is in parent's answers state
     onAnswersChange({
       ...answers,
       [currentQuestion.toString()]: currentAnswer
     });
 
-    // Now, `answers` prop (which reflects the parent's state) should be up-to-date
-    // You would typically send the `answers` prop here to your backend for final submission.
-    console.log('Submitting all answers:', answers); // This `answers` will be the one passed from parent
+    console.log('Submitting all answers:', answers);
 
     try {
-      // Example: send finalAnswers to an API endpoint
-      // const submitResponse = await fetch(`${BASE_URL}questionnaire/submit`, {
-      //   method: 'POST',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify(answers) // Send the full answers object
-      // });
-      // if (!submitResponse.ok) {
-      //   throw new Error('Failed to submit questionnaire');
-      // }
-
       toast({
         title: "Questionnaire submitted!",
         description: "Thank you for completing the questionnaire. We'll be in touch soon!",
       });
+      fetch(`http://ai-app.roverpass.com/questionnaire/content-generator/?fid=${clientId}`, {
+        method: 'GET'
+      })
     } catch (error) {
       toast({
         title: "Error",
@@ -205,12 +173,11 @@ const QuestionnaireForm = ({
     }
   };
 
-  // This useEffect fetches the existing answer for the current question
   useEffect(() => {
     const fetchCurrentAnswer = async () => {
-      setSend(true); // Indicate loading
+      setSend(true);
       try {
-        const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${routeParams.fid}`, {
+        const response = await fetch(`${BASE_URL}questionnaire/qa/?type=${currentQuestion}&fid=${clientId}`, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
         });
@@ -221,14 +188,13 @@ const QuestionnaireForm = ({
         }
 
         const res = await response.json();
-        console.log("Fetched existing answer:", res);
 
-        setChecked(res.checked); // Set checked status from API
+        setChecked(res.checked);
 
         if (res.answer !== undefined && res.answer !== null) {
-          setCurrentAnswer(res.answer); // Set local answer from API
+          setCurrentAnswer(res.answer);
         } else {
-          setCurrentAnswer(''); // Clear if no answer from API
+          setCurrentAnswer('');
         }
       } catch (error) {
         console.error("Error fetching current answer:", error);
@@ -240,20 +206,18 @@ const QuestionnaireForm = ({
         setCurrentAnswer('');
         setChecked(false);
       } finally {
-        setSend(false); // End loading
+        setSend(false);
       }
     };
 
-    // Only fetch if routeParams.fid exists and currentQuestion is valid
-    if (routeParams.fid && currentQuestion > 0 && currentQuestion <= totalQuestions) {
+    if (clientId && currentQuestion > 0 && currentQuestion <= totalQuestions) {
       fetchCurrentAnswer();
     } else {
-        // Reset if no fid or invalid question number
         setCurrentAnswer('');
         setChecked(false);
         setSend(false);
     }
-  }, [currentQuestion, routeParams.fid, totalQuestions]); // Depend on currentQuestion, fid, and totalQuestions
+  }, [currentQuestion, clientId, totalQuestions]);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -278,7 +242,7 @@ const QuestionnaireForm = ({
         <CardContent className="p-6">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              {QUESTIONS[currentQuestion.toString() as keyof typeof QUESTIONS]}
+              {QUESTIONS[currentQuestion.toString()]}
             </h2>
             <Textarea
               value={currentAnswer}
@@ -314,7 +278,7 @@ const QuestionnaireForm = ({
             <div>
               {currentQuestion === totalQuestions ? (
                 <Button
-                  disabled={send} // Removed `!checked` from submit, as submission might happen even if not reviewed
+                  disabled={send}
                   onClick={handleSubmit}
                   className="bg-primary-500 hover:bg-primary-600 text-white px-8"
                 >
@@ -322,7 +286,7 @@ const QuestionnaireForm = ({
                 </Button>
               ) : (
                 <Button
-                  disabled={send} // Removed `!checked` from next, you can navigate even if not reviewed
+                  disabled={send}
                   onClick={handleNext}
                   className="bg-primary-500 hover:bg-primary-600 text-white flex items-center gap-2"
                 >

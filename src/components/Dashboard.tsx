@@ -18,20 +18,6 @@ const Dashboard = ({ clientId }) => {
 
   const handleSave = (pageData: any) => {
     console.log('Saving data for page:', activeTab, pageData);
-    // This is where you'll implement the fetch request to update your database
-    // Example fetch structure:
-    /*
-    fetch(`/api/update-${activeTab}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(pageData)
-    })
-    .then(response => response.json())
-    .then(data => console.log('Success:', data))
-    .catch(error => console.error('Error:', error));
-    */
   };
 
   return (

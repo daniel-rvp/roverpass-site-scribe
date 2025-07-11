@@ -1,17 +1,16 @@
-
 import { useState } from 'react';
 import QuestionnaireForm from '@/components/QuestionnaireForm';
 import Navbar from '@/components/Navbar';
 
-const Index = () => {
+const Index = ({ clientId }) => {
   const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState({});
 
-  const handleQuestionSelect = (questionNumber: number) => {
+  const handleQuestionSelect = (questionNumber) => {
     setCurrentQuestion(questionNumber);
   };
 
-  const handleAnswersChange = (newAnswers: Record<string, string>) => {
+  const handleAnswersChange = (newAnswers) => {
     setAnswers(newAnswers);
   };
 
@@ -28,6 +27,7 @@ const Index = () => {
           answers={answers}
           onQuestionChange={setCurrentQuestion}
           onAnswersChange={handleAnswersChange}
+          clientId={clientId}
         />
       </div>
     </div>
