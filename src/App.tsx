@@ -19,9 +19,25 @@ const App = () => {
     // Here you would typically validate credentials with your backend
     // For now, we'll accept any non-empty credentials
     if (credentials.username && credentials.password) {
-      setIsAuthenticated(true);
-      setClientId(1);
-      console.log('User logged in:', credentials.username);
+      try {
+        fetch(`http://127.0.0.1:8000/authentication/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: credentials.username,
+            password: credentials.password
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          setIsAuthenticated(true);
+          localStorage.setItem("token", res.token);
+        })
+      } catch {
+        setIsAuthenticated(false);
+      }
     }
   };
 
@@ -31,7 +47,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <LoginPage onLogin={handleLogin} />
+          <LoginPage onLogin={handleLogin}/>
         </TooltipProvider>
       </QueryClientProvider>
     );

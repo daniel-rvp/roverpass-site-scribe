@@ -44,8 +44,8 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       const rulesResponse = await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/rules?client_id=eq.${clientId}`, {
         method: 'GET',
         headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'apikey': `${import.meta.env.VITE_KEY}`,
+          'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
         }
       });
       const fetchedRules = await rulesResponse.json();
@@ -53,8 +53,8 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       const faqsResponse = await fetch(`https://bmlrxdnnxhawrhncbvoz.supabase.co/rest/v1/faqs?client_id=eq.${clientId}`, {
         method: 'GET',
         headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+          'apikey': `${import.meta.env.VITE_KEY}`,
+          'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
         }
       });
       const fetchedFaqs = await faqsResponse.json();
@@ -140,8 +140,8 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
 
   const supabaseHeaders = {
     'Content-Type': 'application/json',
-    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtbHJ4ZG5ueGhhd3JobmNidm96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTU1Mjc4NSwiZXhwIjoyMDY1MTI4Nzg1fQ.nxB9n8R4OjPaAdCYc8CooJYfx5OVLxcs_Xs3ZKW295I',
+    'apikey': `${import.meta.env.VITE_KEY}`,
+    'Authorization': `Bearer ${import.meta.env.VITE_KEY}`,
     'Prefer': 'return=representation'
   };
 
@@ -252,7 +252,7 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       {/* Header Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Page Header</CardTitle>
+          <CardTitle className="text-lg ">Page Header</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -289,13 +289,13 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       {/* Rules Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Rules List</CardTitle>
+          <CardTitle className="text-lg ">Rules List</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.rules.map((rule) => (
-            <div key={rule.id!} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
+            <div key={rule.id!} className="border-2  p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-blue-800">Rule</h3>
+                <h3 className="text-lg font-semibold ">Rule</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -351,13 +351,13 @@ const RulesTab: React.FC<RulesTabProps> = ({ onSave, clientId }) => {
       {/* FAQs Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-blue-700">Frequently Asked Questions</CardTitle>
+          <CardTitle className="text-lg ">Frequently Asked Questions</CardTitle>
         </CardHeader>
         <CardContent>
           {formData.faqs.map((faq) => (
-            <div key={faq.id!} className="border-2 border-blue-200 p-4 rounded-lg mt-4">
+            <div key={faq.id!} className="border-2  p-4 rounded-lg mt-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-blue-800">FAQ</h3>
+                <h3 className="text-lg font-semibold ">FAQ</h3>
                 <Button
                   variant="outline"
                   size="sm"
