@@ -22,6 +22,7 @@ interface AmenitiesTabProps {
 
 const AmenitiesTab: React.FC<AmenitiesTabProps> = ({ onSave, clientId }) => {
   const [formData, setFormData] = useState({
+    id: null as number | null,
     amenities_description: '',
     amenities_image: '',
     cta_title: '',

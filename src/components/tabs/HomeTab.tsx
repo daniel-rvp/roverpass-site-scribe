@@ -169,11 +169,11 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSave, clientId }) => {
     value: string
   ) => {
     setFormData(prev => {
-      const currentList = prev[listName] as T[];
+      const currentList = prev[listName];
       if (Array.isArray(currentList)) {
         return {
           ...prev,
-          [listName]: currentList.map((item) =>
+          [listName]: (currentList as unknown as T[]).map((item) =>
             item.id === id ? { ...item, [field]: value } : item
           )
         };
