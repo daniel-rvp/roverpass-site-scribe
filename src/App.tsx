@@ -18,7 +18,7 @@ const supabase = createClient(
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [clientId, setClientId] = useState(0);
 
 
